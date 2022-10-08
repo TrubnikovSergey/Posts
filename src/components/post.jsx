@@ -6,8 +6,28 @@ const Post = ({ title, body }) => {
         <>
             <h1>{title}</h1>
             <br></br>
-            <br></br>
-            <div>{body}</div>
+            <div className="tsa_scrollbar tsa_height">
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+                <div>{body}</div>
+            </div>
         </>
     )
 }

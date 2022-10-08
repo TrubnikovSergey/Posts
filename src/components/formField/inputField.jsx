@@ -1,11 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const InputField = ({ type, placeholder, value, onChange, className }) => {
+const InputField = ({ label, name, type, placeholder, value, onChange }) => {
     return (
         <div>
+            <label htmlFor={name}>{label}</label>
             <input
-                className={className}
+                name={name}
+                id={name}
                 type={type}
                 placeholder={placeholder}
                 value={value}
@@ -15,11 +17,16 @@ const InputField = ({ type, placeholder, value, onChange, className }) => {
     )
 }
 
+InputField.defaultProps = {
+    type: "text"
+}
+
 InputField.propTypes = {
     type: PropTypes.string,
     placeholder: PropTypes.string,
-    className: PropTypes.string,
     value: PropTypes.string,
+    label: PropTypes.string,
+    name: PropTypes.string,
     onChange: PropTypes.func
 }
 

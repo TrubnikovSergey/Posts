@@ -21,14 +21,16 @@ const Pagination = ({
             const end = start + paginationSize
 
             setPages(_.range(start, end))
+            handleChangePage(start)
         }
     }
     const handleClickRight = () => {
         if (pages[paginationSize - 1] < totalCountPages - 1) {
             const start = pages[0] + paginationSize
             const end = Math.min(start + paginationSize, totalCountPages)
-            console.log("Pagination", start, end)
+
             setPages(_.range(start, end))
+            handleChangePage(start)
         }
     }
 

@@ -18,28 +18,31 @@ const NavBar = () => {
 
     return (
         <>
-            <div className="divNavBar">
-                <ul
-                    className="nav justify-content-center nav-pills"
-                    onClick={handlerSetActiveClass}
-                >
-                    <li className="nav-item">
-                        <Link to="/" className="nav-link">
-                            Home
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/login" className="nav-link">
-                            Login
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/search" className="nav-link">
-                            Search
-                        </Link>
-                    </li>
-                </ul>
-            </div>
+            <ul
+                className="nav justify-content-center nav-pills"
+                onClick={handlerSetActiveClass}
+            >
+                <li className="nav-item">
+                    <Link to="/" className="nav-link">
+                        Home
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link to="/login" className="nav-link">
+                        Login
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link to="/search" className="nav-link">
+                        Search
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link to="/admin" className="nav-link">
+                        Admin
+                    </Link>
+                </li>
+            </ul>
         </>
     )
 }

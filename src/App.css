@@ -1,0 +1,10 @@
+.tsa_scrollbar{
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 50%);
+}
+
+.tsa_height{
+    height: calc(70vh + 3rem)
+    /* height: 80vh; */
+}

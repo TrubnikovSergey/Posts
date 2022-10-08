@@ -4,14 +4,15 @@ import Post from "../components/post"
 import PostsList from "../components/postsList"
 import Loader from "../components/loader"
 import getPostById from "../util/findePostById"
-import Pagination from "../components/pagination"
+// import Pagination from "../components/pagination"
+import paginate from "../util/paginate"
 
 const Home = () => {
     const [posts, setPosts] = useState()
     const [currentPage, setCurrentPage] = useState()
     const { postId } = useParams()
-    const pageSize = 9
-    const paginationSize = 3
+    // const pageSize = 9
+    // const paginationSize = 3
 
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/posts")
@@ -22,23 +23,25 @@ const Home = () => {
             })
     }, [])
 
-    const handleChangePage = (page) => {
-        setCurrentPage(page)
-    }
+    // const handleChangePage = (page) => {
+    //     setCurrentPage(page)
+    // }
 
     let renderPostsList = null
     let renderPost = null
 
     if (posts) {
+        const cropPost = paginate(posts, currentPage)
+        console.log(posts)
         renderPostsList = (
             <>
-                <Pagination
+                {/* <Pagination
                     totalCountPages={Math.round(posts.length / pageSize)}
                     paginationSize={paginationSize}
                     handleChangePage={handleChangePage}
                     currentPage={currentPage}
-                />
-                <PostsList items={posts} header="Posts" />
+                /> */}
+                <PostsList items={cropPost} header="Users" />
             </>
         )
 
@@ -51,12 +54,16 @@ const Home = () => {
     }
     return (
         <div className="container">
-            <div className="row d-flex justify-content-evenly">
-                <div className="col-4 shadow-lg p-3 mb-5 bg-body rounded">
-                    {renderPostsList}
+            <div className="row justify-content-center">
+                <div className="col-4 shadow-lg p-3 m-2 mb-5 bg-body rounded">
+                    <div>
+                        <h1>Posts</h1>
+                    </div>
+                    <div className="tsa_scrollbar tsa_height">
+                        {renderPostsList}
+                    </div>
                 </div>
-
-                <div className="col-7 shadow-lg p-3 mb-5 bg-body rounded">
+                <div className="col-7 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                     {renderPost}
                 </div>
             </div>
