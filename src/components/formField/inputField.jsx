@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 const InputField = ({ label, name, type, placeholder, value, onChange }) => {
     return (
         <div>
-            <label htmlFor={name}>{label}</label>
+            <label htmlFor={name}>{label}:&nbsp;</label>
             <input
                 name={name}
                 id={name}
