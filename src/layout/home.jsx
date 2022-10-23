@@ -32,7 +32,6 @@ const Home = () => {
 
     if (posts) {
         const cropPost = paginate(posts, currentPage)
-        console.log(posts)
         renderPostsList = (
             <>
                 {/* <Pagination

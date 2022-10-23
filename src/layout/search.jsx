@@ -32,9 +32,7 @@ const Search = () => {
 
     let renderPostsList = null
     if (foundePosts) {
-        renderPostsList = (
-            <PostsList header={`Founde posts`} items={foundePosts} />
-        )
+        renderPostsList = <PostsList items={foundePosts} endPoint="/" />
     }
 
     return (

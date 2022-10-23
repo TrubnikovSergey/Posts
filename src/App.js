@@ -5,7 +5,7 @@ import NavBar from "./components/navBar"
 import Search from "./layout/search"
 import "bootstrap/dist/css/bootstrap.css"
 import "./App.css"
-import Admin from "./layout/admin"
+import AdminPage from "./layout/admin"
 
 function App() {
     return (
@@ -20,7 +20,7 @@ function App() {
 
             <Switch>
                 <Route path="/login/:reg?" component={Login} />
-                <Route path="/admin" component={Admin} />
+                <Route path="/admin/:postId?" component={AdminPage} />
                 <Route path="/search" component={Search} />
                 <Route path="/:postId?" exact component={Home} />
             </Switch>

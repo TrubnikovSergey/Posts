@@ -2,12 +2,12 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 
-const PostsList = ({ items }) => {
+const PostsList = ({ items, endPoint = "/" }) => {
     return (
         <>
             <div id="PostList">
                 {items.map((post) => (
-                    <Link key={post.id} to={`/${post.id}`}>
+                    <Link key={post.id} to={endPoint + post.id}>
                         {post.title}
                         <hr />
                     </Link>
@@ -19,7 +19,7 @@ const PostsList = ({ items }) => {
 
 PostsList.propTypes = {
     items: PropTypes.array,
-    header: PropTypes.string
+    endPoint: PropTypes.string
 }
 
 export default PostsList
