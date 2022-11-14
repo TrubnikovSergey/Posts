@@ -4,9 +4,10 @@ import PropTypes from "prop-types"
 const Post = ({ title, body }) => {
     return (
         <>
-            <h1>{title}</h1>
-            <br></br>
             <div className="tsa_scrollbar tsa_height">
+                <p>
+                    <h1>{title}</h1>
+                </p>
                 <div>{body}</div>
                 <div>{body}</div>
                 <div>{body}</div>

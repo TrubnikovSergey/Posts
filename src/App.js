@@ -1,29 +1,36 @@
-import React, { Route, Switch } from "react-router-dom"
-import Home from "./layout/home"
-import Login from "./layout/login"
-import NavBar from "./components/navBar"
-import Search from "./layout/search"
+import React, { Route, Routes } from "react-router-dom"
+import Home from "./components/page/home"
 import "bootstrap/dist/css/bootstrap.css"
 import "./App.css"
-import AdminPage from "./layout/admin"
+import AdminPage from "./components/page/admin"
+import { useDispatch } from "react-redux"
+import { postsFetchAll } from "./store/postsSlice"
+import { useEffect } from "react"
+import { Layout } from "./layout/layout"
+import RegForm from "./components/forms/regForm"
+import LayoutLogin from "./layout/layoutLogin"
+import LoginForm from "./components/forms/loginForm"
 
 function App() {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(postsFetchAll())
+    }, [])
+
     return (
         <>
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-4 shadow p-3 mb-5 bg-body rounded">
-                        <NavBar />
-                    </div>
-                </div>
-            </div>
-
-            <Switch>
-                <Route path="/login/:reg?" component={Login} />
-                <Route path="/admin/:postId?" component={AdminPage} />
-                <Route path="/search" component={Search} />
-                <Route path="/:postId?" exact component={Home} />
-            </Switch>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path=":postId" element={<Home />} />
+                    <Route path="login" element={<LayoutLogin />}>
+                        <Route index element={<LoginForm />} />
+                        <Route path=":reg" element={<RegForm />} />
+                    </Route>
+                    <Route path="admin" element={<AdminPage />} />
+                </Route>
+            </Routes>
         </>
     )
 }
