@@ -1,4 +1,4 @@
-import { createSlice, createAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import postService from "../service/post.service"
 
 const postSlice = createSlice({
@@ -9,28 +9,30 @@ const postSlice = createSlice({
         error: null
     },
     reducers: {
+        requestPosts(state, action) {
+            state.isLoading = true
+        },
         receivePosts(state, action) {
             state.entities = action.payload
+            state.isLoading = false
         },
-        receivePostsFailed(state, action) {
+        requestPostsFailed(state, action) {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         }
     }
 })
 
 const { reducer: postReducer, actions } = postSlice
-const { receivePosts, receivePostsFailed } = actions
-
-const requestLoadPosts = createAction("posts/loadPosts")
+const { receivePosts, requestPosts, requestPostsFailed } = actions
 
 export const postsFetchAll = () => async (dispatch) => {
-    dispatch(requestLoadPosts())
+    dispatch(requestPosts())
     try {
         const content = await postService.fetchAll()
         dispatch(receivePosts(content))
     } catch (error) {
-        dispatch(receivePostsFailed(error.message))
+        dispatch(requestPostsFailed(error.message))
     }
 }
 
