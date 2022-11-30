@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import InputField from "../formField/inputField"
-import { getAuthUser, signIn } from "../../store/authUserSlice"
+import { getAuthError, getIsAuth, signIn } from "../../store/authUserSlice"
 import { useDispatch, useSelector } from "react-redux"
 import * as yup from "yup"
+import { toast } from "react-toastify"
 
 const LoginForm = () => {
     const [data, setData] = useState({ email: "", password: "" })
-    const dispatch = useDispatch()
     const [error, setError] = useState({})
-    const authUser = useSelector(getAuthUser())
-
+    const authError = useSelector(getAuthError())
+    const isAuth = useSelector(getIsAuth())
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const validateScheme = yup.object().shape({
         password: yup
             .string()
@@ -24,7 +26,7 @@ const LoginForm = () => {
                 /(?=.*[!@#$%^&*])/,
                 "Пароль должен содержать один из специальных символов !@#$%^&*"
             )
-            .length(8, "Проль должен быть минимум 8 символов"),
+            .min(8, "Проль должен быть минимум 8 символов"),
         email: yup
             .string()
             .required("Электронная почта обязательная для заполнения")
@@ -37,6 +39,16 @@ const LoginForm = () => {
     }
 
     useEffect(() => {
+        if (!isAuth) {
+            if (authError) {
+                toast.error(authError)
+            }
+        } else {
+            navigate("/")
+        }
+    }, [isAuth, authError])
+
+    useEffect(() => {
         validateScheme
             .validate(data)
             .then(() => {
@@ -46,7 +58,7 @@ const LoginForm = () => {
     }, [data])
 
     const handleLogin = () => {
-        if (Object.keys(error).length === 0 && !authUser) {
+        if (Object.keys(error).length === 0) {
             dispatch(signIn(data.email, data.password))
         }
     }

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import InputField from "../formField/inputField"
 import * as yup from "yup"
 import RadioField from "../formField/radioField"
+import { useDispatch } from "react-redux"
+import { signUp } from "../../store/authUserSlice"
 
 const RegForm = () => {
     const [data, setData] = useState({
@@ -11,6 +13,7 @@ const RegForm = () => {
         password: "",
         sex: "male"
     })
+    const dispatch = useDispatch()
     const [error, setError] = useState({})
 
     const handleChange = (e) => {
@@ -38,7 +41,7 @@ const RegForm = () => {
                 /(?=.*[!@#$%^&*])/,
                 "Пароль должен содержать один из специальных символов !@#$%^&*"
             )
-            .length(8, "Проль должен быть минимум 8 символов"),
+            .min(8, "Проль должен быть минимум 8 символов"),
         email: yup
             .string()
             .required("Электронная почта обязательная для заполнения")
@@ -51,6 +54,7 @@ const RegForm = () => {
         console.log(error)
         if (Object.keys(error).length === 0) {
             console.log("OK")
+            dispatch(signUp(data))
         }
     }
     return (

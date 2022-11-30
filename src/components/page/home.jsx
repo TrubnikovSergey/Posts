@@ -1,25 +1,26 @@
-import React from "react"
+import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import Post from "../post"
 import PostsList from "../postsList"
 import Loader from "../loader"
 import { useSelector } from "react-redux"
-// import Container from "../container"
 import SearchForm from "../forms/serachForm"
-import { getPostById } from "../../store/postsSlice"
+import { getPostById, getPostsList } from "../../store/postsSlice"
 
 const Home = () => {
-    const posts = useSelector((state) => state.posts.entities)
+    const postsInit = useSelector(getPostsList())
     const { postId } = useParams()
     const findePost = useSelector(getPostById(postId))
+    const [postList] = useState(postsInit)
+    // setPostList
 
     let renderPostsList = null
     let renderPost = null
 
-    if (posts.length) {
+    if (postList.length) {
         renderPostsList = (
             <>
-                <PostsList items={posts} header="Users" />
+                <PostsList items={postList} header="Users" />
             </>
         )
 
@@ -32,7 +33,6 @@ const Home = () => {
 
     return (
         <>
-            {/* <Container> */}
             <div className="col-4 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                 <div>
                     <h1>Posts</h1>
@@ -45,7 +45,6 @@ const Home = () => {
             <div className="col-7 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                 {renderPost}
             </div>
-            {/* </Container> */}
         </>
     )
 }

@@ -1,14 +1,20 @@
 import React from "react"
-// import Container from "../container"
-import AdminForm from "../forms/adminForm"
+import { useSelector } from "react-redux"
+import { getAuthUser } from "../../store/authUserSlice"
+import { getUserPostsList } from "../../store/postsSlice"
+import PostsList from "../postsList"
 
 const AdminPage = () => {
+    const user = useSelector(getAuthUser())
+    const postsList = useSelector(getUserPostsList(user.id))
+
     return (
-        // <Container>
-        <div className="col-11 shadow-lg p-3 mb-5 bg-body rounded">
-            <AdminForm />
-        </div>
-        // </Container>
+        <>
+            <h1>Admin</h1>
+            <div>
+                <PostsList items={postsList} endPoint="/admin/" />
+            </div>
+        </>
     )
 }
 
