@@ -6,10 +6,6 @@ const schema = new Schema(
       type: String,
       required: true,
     },
-    username: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
@@ -21,7 +17,7 @@ const schema = new Schema(
     },
     sex: {
       type: String,
-      enum: ["mail", "female"],
+      enum: ["male", "female"],
     },
   },
   { timestamps: true }
