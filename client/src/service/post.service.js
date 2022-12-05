@@ -1,6 +1,7 @@
 import httpService from "../service/http.service"
+import config from "../config"
 
-const url = "https://jsonplaceholder.typicode.com/posts"
+const url = config.backendEndPoint + "posts/"
 
 const postService = {
     fetchAll: async () => {

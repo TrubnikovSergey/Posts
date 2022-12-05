@@ -64,35 +64,40 @@ const LoginForm = () => {
     }
     return (
         <>
-            <div className="d-flex justify-content-center">
-                <div className="col-4 d-flex flex-column">
-                    <div className="m-1">
-                        <InputField
-                            label="Email"
-                            name="email"
-                            type="text"
-                            value={data.email || ""}
-                            onChange={handleChange}
-                            error={error}
-                        />
+            <form>
+                <div className="d-flex justify-content-center">
+                    <div className="col-4 d-flex flex-column">
+                        <div className="m-1">
+                            <InputField
+                                label="Email"
+                                name="email"
+                                type="text"
+                                value={data.email || ""}
+                                onChange={handleChange}
+                                error={error}
+                            />
+                        </div>
+                        <div className="m-1">
+                            <InputField
+                                name="password"
+                                label="Password"
+                                type="password"
+                                value={data.password || ""}
+                                onChange={handleChange}
+                                error={error}
+                            />
+                        </div>
                     </div>
-                    <div className="m-1">
-                        <InputField
-                            name="password"
-                            label="Password"
-                            type="password"
-                            value={data.password || ""}
-                            onChange={handleChange}
-                            error={error}
-                        />
+                    <div className="d-flex m-1 align-self-stretch">
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleLogin}
+                        >
+                            Login
+                        </button>
                     </div>
                 </div>
-                <div className="d-flex m-1 align-self-stretch">
-                    <button className="btn btn-primary" onClick={handleLogin}>
-                        Login
-                    </button>
-                </div>
-            </div>
+            </form>
             <br />
             <div className="d-flex justify-content-center">
                 <Link to="/login/reg">Registration</Link>

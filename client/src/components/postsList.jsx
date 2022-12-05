@@ -7,7 +7,7 @@ const PostsList = ({ items, endPoint = "/" }) => {
         <>
             <div id="PostList">
                 {items.map((post) => (
-                    <Link key={post.id} to={endPoint + post.id}>
+                    <Link key={post._id} to={endPoint + post._id}>
                         {post.title}
                         <hr />
                     </Link>

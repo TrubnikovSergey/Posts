@@ -12,7 +12,6 @@ const Home = () => {
     const { postId } = useParams()
     const findePost = useSelector(getPostById(postId))
     const [postList] = useState(postsInit)
-    // setPostList
 
     let renderPostsList = null
     let renderPost = null

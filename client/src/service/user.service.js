@@ -1,6 +1,7 @@
 import httpService from "./http.service"
+import config from "../config"
 
-const url = "https://jsonplaceholder.typicode.com/users"
+const url = config.backendEndPoint + "users/"
 
 const userService = {
     login: async (email, pass) => {

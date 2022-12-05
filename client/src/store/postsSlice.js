@@ -10,17 +10,12 @@ const postSlice = createSlice({
     },
     reducers: {
         requestPosts(state, action) {
-            // state.isLoading = true
             return { ...state, isLoading: true }
         },
         receivePosts(state, action) {
-            // state.entities = action.payload
-            // state.isLoading = false
             return { ...state, entities: action.payload, isLoading: false }
         },
         requestPostsFailed(state, action) {
-            // state.error = action.payload
-            // state.isLoading = false
             return { ...state, error: action.payload, isLoading: false }
         }
     }
@@ -48,7 +43,7 @@ export const getUserPostsList = (userId) => (state) => {
 }
 
 export const getPostById = (id) => (state) => {
-    return state.posts.entities.find((item) => String(item.id) === String(id))
+    return state.posts.entities.find((item) => String(item._id) === String(id))
 }
 
 export default postReducer
