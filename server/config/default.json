@@ -1,6 +1,0 @@
-{
-    "port":8080,
-    "mongoUri":"mongodb://localhost:27017/diploma",
-    "accessSecret":"Diploma of Trubnikov Sergey 2022",
-    "refreshSecret": "New nice token for Diploma of Trubnikov Sergey 2022"
-}
