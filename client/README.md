@@ -1,3 +1,16 @@
+# Запуск проекта (для BackEnd - веток)
+Для запуска нужно:
+- клонировать соответсвующую ветку репозитория
+- установить все зависимости в папке Server (npm i).
+- в папке server создать папку config. В папке config создать файл default.json
+- в файл default.json внести следующие даныне в формате JSON\
+{\
+    "port":8080,\
+    "mongoUri":" .... вставить свою ссылку из Mongo. В ссылке вставить пароль свой, который вводили при регистрации проекта в Mongo... ",\
+    "accessSecret":"... Любой произвольный текст ...",\
+    "refreshSecret": "... Любой произвольный текст ..."\
+}
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
