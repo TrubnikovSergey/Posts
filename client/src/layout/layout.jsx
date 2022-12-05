@@ -2,6 +2,7 @@ import React from "react"
 import { Outlet } from "react-router-dom"
 import Container from "../components/container"
 import NavBar from "../components/navBar"
+import { ToastContainer } from "react-toastify"
 
 const Layout = () => {
     return (
@@ -15,9 +16,13 @@ const Layout = () => {
                     </div>
                 </div>
             </header>
-            <Container>
-                <Outlet />
-            </Container>
+            <div id="content">
+                <Container>
+                    <Outlet />
+                </Container>
+                <ToastContainer />
+            </div>
+            <footer>1111</footer>
         </>
     )
 }

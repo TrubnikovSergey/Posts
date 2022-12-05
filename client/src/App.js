@@ -9,7 +9,6 @@ import { Layout } from "./layout/layout"
 import RegForm from "./components/forms/regForm"
 import LayoutLogin from "./layout/layoutLogin"
 import LoginForm from "./components/forms/loginForm"
-import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Logout from "./components/logout"
 import PrivatePage from "./components/privatePage"
@@ -56,7 +55,6 @@ function App() {
                     </Route>
                 </Route>
             </Routes>
-            <ToastContainer />
         </>
     ) : (
         <Loader />
