@@ -23,8 +23,8 @@ const LoginForm = () => {
             )
             .matches(/(?=.*[0-9])/, "Пароль должен содержать хотябы одну цифру")
             .matches(
-                /(?=.*[!@#$%^&*])/,
-                "Пароль должен содержать один из специальных символов !@#$%^&*"
+                /(?=.*[!@#$%^&*_])/,
+                "Пароль должен содержать один из специальных символов !@#$%^&*_"
             )
             .min(8, "Проль должен быть минимум 8 символов"),
         email: yup
@@ -57,7 +57,8 @@ const LoginForm = () => {
             .catch((err) => setError({ [err.path]: err.message }))
     }, [data])
 
-    const handleLogin = () => {
+    const handleLogin = (e) => {
+        e.preventDefault()
         if (Object.keys(error).length === 0) {
             dispatch(signIn(data.email, data.password))
         }

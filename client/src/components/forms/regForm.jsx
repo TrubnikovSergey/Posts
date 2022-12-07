@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import InputField from "../formField/inputField"
 import * as yup from "yup"
 import RadioField from "../formField/radioField"
-import { useDispatch } from "react-redux"
-import { signUp } from "../../store/authUserSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { getIsAuth, signUp } from "../../store/authUserSlice"
 
 const RegForm = () => {
     const [data, setData] = useState({
@@ -14,12 +14,20 @@ const RegForm = () => {
         sex: "male"
     })
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const isAuth = useSelector(getIsAuth())
     const [error, setError] = useState({})
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setData((prev) => ({ ...prev, [name]: value }))
     }
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate("/")
+        }
+    }, [isAuth])
 
     useEffect(() => {
         validateScheme
@@ -38,8 +46,8 @@ const RegForm = () => {
             )
             .matches(/(?=.*[0-9])/, "Пароль должен содержать хотябы одну цифру")
             .matches(
-                /(?=.*[!@#$%^&*])/,
-                "Пароль должен содержать один из специальных символов !@#$%^&*"
+                /(?=.*[!@#$%^&*_])/,
+                "Пароль должен содержать один из специальных символов !@#$%^&*_"
             )
             .min(8, "Проль должен быть минимум 8 символов"),
         email: yup
@@ -51,9 +59,7 @@ const RegForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(error)
         if (Object.keys(error).length === 0) {
-            console.log("OK")
             dispatch(signUp(data))
         }
     }

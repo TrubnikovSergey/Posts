@@ -1,19 +1,40 @@
 import httpService from "./http.service"
 import config from "../config"
 
-const url = config.backendEndPoint + "users/"
+const url = config.backendEndPoint + "auth/"
 
 const userService = {
-    login: async (email, pass) => {
-        const { data } = await httpService.get(url)
-        return data.find((item) => {
-            return item.email === email
-        })
+    login: async (email, password) => {
+        try {
+            const { data } = await httpService.post(url + "signIn", {
+                email,
+                password
+            })
+            return data
+        } catch (error) {
+            throw new Error(error.response.data.error.message)
+        }
+    },
+    loginWithToken: async (user) => {
+        try {
+            const { data } = await httpService.post(
+                url + "signInWithToken",
+                user
+            )
+
+            return data
+        } catch (error) {
+            throw new Error(error.response.data.error.message)
+        }
     },
     create: async (user) => {
-        const { data } = await httpService.post(url, user)
+        try {
+            const { data } = await httpService.post(url + "signUp", user)
 
-        return data
+            return data
+        } catch (error) {
+            throw new Error(error.response.data.error.message)
+        }
     }
 }
 

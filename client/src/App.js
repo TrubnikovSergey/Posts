@@ -1,4 +1,4 @@
-import React, { Route, Routes } from "react-router-dom"
+import React, { Navigate, Route, Routes } from "react-router-dom"
 import Home from "./components/page/home"
 import "bootstrap/dist/css/bootstrap.css"
 import "./App.css"
@@ -12,21 +12,30 @@ import LoginForm from "./components/forms/loginForm"
 import "react-toastify/dist/ReactToastify.css"
 import Logout from "./components/logout"
 import PrivatePage from "./components/privatePage"
-import { getAuthUserLocalStorage } from "./service/localStorage.service"
-import { signIn } from "./store/authUserSlice"
+import localStorageService from "./service/localStorage.service"
+import { getAuthError, getIsAuth, signInWithToken } from "./store/authUserSlice"
 import { useEffect } from "react"
-import LayoutAdmin from "./layout/layoutAdmin"
-import EditPage from "./components/page/editePostPage"
+import EditPostPage from "./components/page/editPostPage"
 import Loader from "./components/loader"
+import { toast } from "react-toastify"
+import LayoutAdmin from "./layout/layoutAdmin"
 
 function App() {
     const dispatch = useDispatch()
-    const authUser = getAuthUserLocalStorage()
+    const authUser = localStorageService.getAuthUser()
     const postsList = useSelector(getPostsList())
+    const authError = useSelector(getAuthError())
+    const isAuth = useSelector(getIsAuth())
+
+    useEffect(() => {
+        if (authUser && !isAuth && authError) {
+            toast.error(authError)
+        }
+    }, [isAuth, authError])
 
     useEffect(() => {
         if (authUser) {
-            dispatch(signIn(authUser.email))
+            dispatch(signInWithToken(authUser))
         }
         dispatch(postsFetchAll())
     }, [])
@@ -42,17 +51,19 @@ function App() {
                         <Route index element={<LoginForm />} />
                         <Route path=":reg" element={<RegForm />} />
                     </Route>
-                    <Route path="admin" element={<LayoutAdmin />}>
-                        <Route
-                            index
-                            element={
-                                <PrivatePage>
-                                    <AdminPage />
-                                </PrivatePage>
-                            }
-                        />
-                        <Route path=":postId" element={<EditPage />} />
+                    <Route
+                        path="admin"
+                        element={
+                            <PrivatePage>
+                                <LayoutAdmin />
+                            </PrivatePage>
+                        }
+                    >
+                        <Route index element={<AdminPage />} />
+                        <Route path=":postId" element={<EditPostPage />} />
+                        <Route path="new" element={<EditPostPage />} />
                     </Route>
+                    <Route path="*" element={<Navigate replace to="/" />} />
                 </Route>
             </Routes>
         </>

@@ -10,19 +10,59 @@ const postSlice = createSlice({
     },
     reducers: {
         requestPosts(state, action) {
-            return { ...state, isLoading: true }
+            state.isLoading = true
         },
         receivePosts(state, action) {
-            return { ...state, entities: action.payload, isLoading: false }
+            state.entities = action.payload
+            state.isLoading = false
+        },
+        requestCreatePost(state, action) {
+            state.isLoading = true
+        },
+        receiveCreatePost(state, action) {
+            state.entities.push(action.payload)
+            state.isLoading = false
+        },
+        requestCreatePostFailed(state, action) {
+            state.error = action.payload
+            state.isLoading = false
+        },
+        requestUpdatePost(state, action) {
+            state.isLoading = true
+        },
+        receiveUpdatePost(state, action) {
+            state.entities.forEach((item) => {
+                if (item._id === action.payload._id) {
+                    item.title = action.payload.title
+                    item.body = action.payload.body
+                }
+            })
+
+            state.isLoading = false
+        },
+        requestUpdatePostFailed(state, action) {
+            state.error = action.payload
+            state.isLoading = false
         },
         requestPostsFailed(state, action) {
-            return { ...state, error: action.payload, isLoading: false }
+            state.error = action.payload
+            state.isLoading = false
         }
     }
 })
 
 const { reducer: postReducer, actions } = postSlice
-const { receivePosts, requestPosts, requestPostsFailed } = actions
+const {
+    receivePosts,
+    requestPosts,
+    requestPostsFailed,
+    requestCreatePostFailed,
+    requestCreatePost,
+    requestUpdatePostFailed,
+    requestUpdatePost,
+    receiveUpdatePost,
+    receiveCreatePost
+} = actions
 
 export const postsFetchAll = () => async (dispatch) => {
     dispatch(requestPosts())
@@ -31,6 +71,25 @@ export const postsFetchAll = () => async (dispatch) => {
         dispatch(receivePosts(content))
     } catch (error) {
         dispatch(requestPostsFailed(error.message))
+    }
+}
+
+export const updatePost = (post) => async (dispatch) => {
+    dispatch(requestUpdatePost())
+    try {
+        const data = await postService.update(post)
+        dispatch(receiveUpdatePost(data))
+    } catch (error) {
+        dispatch(requestUpdatePostFailed(error.message))
+    }
+}
+export const createPost = (post) => async (dispatch) => {
+    dispatch(requestCreatePost())
+    try {
+        const data = await postService.create(post)
+        dispatch(receiveCreatePost(data))
+    } catch (error) {
+        dispatch(requestCreatePostFailed(error.message))
     }
 }
 

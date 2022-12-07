@@ -1,11 +1,13 @@
 import React, { useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import { getPostById } from "../../store/postsSlice"
+import localStorageService from "../../service/localStorage.service"
+import { createPost, getPostById, updatePost } from "../../store/postsSlice"
 import InputField from "../formField/inputField"
 import TextAreaField from "../formField/textAreaField"
 
 const EditPostPage = () => {
+    console.log("EditPostPage")
     const handleChange = ({ target }) => {
         setData((prev) => ({ ...prev, [target.name]: target.value }))
     }
@@ -15,12 +17,20 @@ const EditPostPage = () => {
         ? useState({ title: post.title, body: post.body })
         : useState({ title: "", body: "" })
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { userId } = localStorageService.getAuthUser()
 
     const goBack = () => {
         navigate(-1)
     }
 
-    const saveHandle = () => {}
+    const saveHandle = () => {
+        if (postId) {
+            dispatch(updatePost({ ...data, _id: postId, userId }))
+        } else {
+            dispatch(createPost({ ...data, userId }))
+        }
+    }
 
     let render = null
     if (data) {
@@ -28,7 +38,7 @@ const EditPostPage = () => {
             <>
                 <div>
                     <button className="btn btn-primary mb-3" onClick={goBack}>
-                        Back
+                        {postId ? "Back" : "Cancel"}
                     </button>
                 </div>
                 <InputField
@@ -45,7 +55,7 @@ const EditPostPage = () => {
                 />
                 <div className="d-flex justify-content-end mt-3">
                     <button className="btn btn-primary" onClick={saveHandle}>
-                        Save
+                        {postId ? "Save" : "Create"}
                     </button>
                 </div>
             </>

@@ -1,14 +1,39 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const { check, validationResult } = require("express-validator");
+const { check, validationResult, body } = require("express-validator");
 const User = require("../models/User");
 const router = express.Router({ mergeParams: true });
 const tokenService = require("../services/token.service");
-const Token = require("../models/Token");
+const yup = require("yup");
+
+const validateSchemePassword = yup.object().shape({
+  password: yup
+    .string()
+    .required("Пароль обязателен для заполнения")
+    .matches(
+      /(?=.*[A-Z])/,
+      "Пароль должен содержать хотябы одну заглавную букву"
+    )
+    .matches(/(?=.*[0-9])/, "Пароль должен содержать хотябы одну цифру")
+    .matches(
+      /(?=.*[!@#$%^&*_])/,
+      "Пароль должен содержать один из специальных символов !@#$%^&*_"
+    )
+    .min(8, "Проль должен быть минимум 8 символов"),
+});
 
 router.post("/signUp", [
   check("email", "Некорректный email").isEmail(),
-  check("password", "Минимальная длина пароля 8 символов").isLength({ min: 8 }),
+  body("password", "Пароль не соответствует утсановленным норма").custom(
+    (value) => {
+      const data = { password: value };
+
+      validateSchemePassword.validate(data).then(() => {
+        return true;
+      });
+      return false;
+    }
+  ),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -51,9 +76,29 @@ router.post("/signUp", [
   },
 ]);
 
+router.post("/signInWithToken", async (req, res) => {
+  const { userId: _id, accessToken, refreshToken } = req.body;
+  const isValidAccessToken = tokenService.validateAccess(accessToken);
+  const isValidRefreshToken = tokenService.validateRefresh(refreshToken);
+
+  if (!isValidAccessToken && !isValidRefreshToken) {
+    return res.status(400).send({
+      error: {
+        message: "TOKENS_IS_NOT_VALID",
+        code: 400,
+      },
+    });
+  }
+
+  const existingUser = await User.findOne({ _id });
+  res.status(200).send(existingUser);
+});
+
 router.post("/signIn", [
   check("email", "Email некорректный").normalizeEmail().isEmail(),
-  check("password", "Пароль не может быть пустым").exists(),
+  body("password", "Пароль не соответствует утсановленным нормам").custom(
+    (password) => validateSchemePassword.isValidSync({ password })
+  ),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -66,11 +111,8 @@ router.post("/signIn", [
           },
         });
       }
-
       const { email, password } = req.body;
       const existingUser = await User.findOne({ email });
-      // const existingUser = await User.find();
-      // res.send(existingUser);
 
       if (!existingUser) {
         return res.status(400).send({

@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom"
 import { getIsAuth } from "../store/authUserSlice"
 
 const PrivatePage = ({ children }) => {
+    console.log("PrivatePage")
     const isAuth = useSelector(getIsAuth())
     if (isAuth) {
         return children
