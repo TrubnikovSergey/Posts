@@ -8,12 +8,23 @@ const postService = {
         const { data } = await httpService.get(url)
         return data
     },
-    async create(post) {
-        const { data } = await httpService.post(`${url}/new`, post)
+    async create(post, accessToken, refreshToken) {
+        const { data } = await httpService.post(`${url}/new`, post, {
+            headers: { authorization: `Bearer ${accessToken} ${refreshToken}` }
+        })
         return data
     },
-    async update(post) {
-        const { data } = await httpService.patch(`${url}/${post._id}`, post)
+    async update(post, accessToken, refreshToken) {
+        const { data } = await httpService.patch(`${url}/${post._id}`, post, {
+            headers: { authorization: `Bearer ${accessToken} ${refreshToken}` }
+        })
+        return data
+    },
+
+    async delete(postId, accessToken, refreshToken) {
+        const { data } = await httpService.delete(`${url}/${postId}`, {
+            headers: { authorization: `Bearer ${accessToken} ${refreshToken}` }
+        })
         return data
     }
 }

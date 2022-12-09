@@ -6,19 +6,23 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(" ");
+    const [, tokenAccess, tokenRefresh] = token;
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorazed" });
     }
 
-    const data = tokenService.validateAccess(token);
+    const dataAccess = tokenService.validateAccess(tokenAccess);
+    const dataRefresh = tokenService.validateRefresh(tokenRefresh);
 
-    if (!data) {
+    if (!dataAccess && !dataRefresh) {
       return res.status(401).json({ message: "Unauthorized" });
+      // req.userError = "Unauthorized";
+    } else {
+      req.user = dataAccess ? dataAccess : dataRefresh;
+      req.userError = null;
     }
-
-    req.user = data;
 
     next();
   } catch (e) {

@@ -18,6 +18,7 @@ module.exports = {
             "error",
             { anonymous: "always", named: "never" }
         ],
+        "no-unused-vars": "off",
         quotes: 0,
         "multiline-ternary": ["off"],
         semi: 0

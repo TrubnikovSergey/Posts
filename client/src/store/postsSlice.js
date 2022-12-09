@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import localStorageService from "../service/localStorage.service"
 import postService from "../service/post.service"
 
 const postSlice = createSlice({
@@ -30,6 +31,9 @@ const postSlice = createSlice({
         requestUpdatePost(state, action) {
             state.isLoading = true
         },
+        requestDeletePost(state, action) {
+            state.isLoading = true
+        },
         receiveUpdatePost(state, action) {
             state.entities.forEach((item) => {
                 if (item._id === action.payload._id) {
@@ -37,7 +41,20 @@ const postSlice = createSlice({
                     item.body = action.payload.body
                 }
             })
+        },
+        receiveDeletePost(state, action) {
+            const indexItem = state.entities.findIndex(
+                (item) => item._id === action.payload
+            )
 
+            if (indexItem !== -1) {
+                state.entities.splice(indexItem, 1)
+            }
+
+            state.isLoading = false
+        },
+        requestDeletePostFailed(state, action) {
+            state.error = action.payload
             state.isLoading = false
         },
         requestUpdatePostFailed(state, action) {
@@ -53,15 +70,18 @@ const postSlice = createSlice({
 
 const { reducer: postReducer, actions } = postSlice
 const {
-    receivePosts,
     requestPosts,
+    receivePosts,
     requestPostsFailed,
-    requestCreatePostFailed,
+    receiveCreatePost,
     requestCreatePost,
-    requestUpdatePostFailed,
+    requestCreatePostFailed,
     requestUpdatePost,
     receiveUpdatePost,
-    receiveCreatePost
+    requestUpdatePostFailed,
+    requestDeletePost,
+    receiveDeletePost,
+    requestDeletePostFailed
 } = actions
 
 export const postsFetchAll = () => async (dispatch) => {
@@ -77,16 +97,42 @@ export const postsFetchAll = () => async (dispatch) => {
 export const updatePost = (post) => async (dispatch) => {
     dispatch(requestUpdatePost())
     try {
-        const data = await postService.update(post)
+        const authUser = localStorageService.getAuthUser()
+        const data = await postService.update(
+            post,
+            authUser.accessToken,
+            authUser.refreshToken
+        )
         dispatch(receiveUpdatePost(data))
     } catch (error) {
         dispatch(requestUpdatePostFailed(error.message))
     }
 }
+
+export const removePost = (_id) => async (dispatch) => {
+    dispatch(requestDeletePost())
+    try {
+        const authUser = localStorageService.getAuthUser()
+        await postService.delete(
+            _id,
+            authUser.accessToken,
+            authUser.refreshToken
+        )
+        dispatch(receiveDeletePost(_id))
+    } catch (error) {
+        dispatch(requestDeletePostFailed(error.message))
+    }
+}
+
 export const createPost = (post) => async (dispatch) => {
     dispatch(requestCreatePost())
     try {
-        const data = await postService.create(post)
+        const authUser = localStorageService.getAuthUser()
+        const data = await postService.create(
+            post,
+            authUser.accessToken,
+            authUser.refreshToken
+        )
         dispatch(receiveCreatePost(data))
     } catch (error) {
         dispatch(requestCreatePostFailed(error.message))

@@ -7,7 +7,6 @@ import InputField from "../formField/inputField"
 import TextAreaField from "../formField/textAreaField"
 
 const EditPostPage = () => {
-    console.log("EditPostPage")
     const handleChange = ({ target }) => {
         setData((prev) => ({ ...prev, [target.name]: target.value }))
     }
@@ -30,6 +29,8 @@ const EditPostPage = () => {
         } else {
             dispatch(createPost({ ...data, userId }))
         }
+
+        navigate(-1)
     }
 
     let render = null
@@ -37,7 +38,10 @@ const EditPostPage = () => {
         render = (
             <>
                 <div>
-                    <button className="btn btn-primary mb-3" onClick={goBack}>
+                    <button
+                        className="btn btn-primary mb-2 mt-2"
+                        onClick={goBack}
+                    >
                         {postId ? "Back" : "Cancel"}
                     </button>
                 </div>
@@ -53,7 +57,7 @@ const EditPostPage = () => {
                     value={data.body}
                     onChange={handleChange}
                 />
-                <div className="d-flex justify-content-end mt-3">
+                <div className="d-flex justify-content-end mt-2">
                     <button className="btn btn-primary" onClick={saveHandle}>
                         {postId ? "Save" : "Create"}
                     </button>

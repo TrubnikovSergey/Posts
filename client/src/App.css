@@ -1,11 +1,11 @@
-.tsa_scrollbar{
+/*.tsa_scrollbar{
     overflow: auto;
     scrollbar-width: thin;
 }
 
-/* .tsa_height{
+ .tsa_height{
     height: 50vh
-} */
+} 
 footer {
     height: 50px;
     margin-top: -50px;
@@ -13,7 +13,7 @@ footer {
   .content {
     min-height: calc(60vh - 70px);
   }
-/* .tsa_scrollbar {
+ .tsa_scrollbar {
     position: relative;
     height: 60vh;
     margin-top: 0.5rem;

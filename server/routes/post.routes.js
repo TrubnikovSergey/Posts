@@ -27,10 +27,25 @@ router.post("/new", auth, async (req, res) => {
   }
 });
 
+router.delete("/:postId", auth, async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const removeedPost = await Post.findById(postId);
+
+    await removeedPost.remove();
+
+    return res.send(null);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ message: "На сервере произошла ошибка. Попробуйте позже." });
+  }
+});
+
 router.patch("/:postId", auth, async (req, res) => {
   try {
     const { postId } = req.params;
-
     const updatedPost = await Post.findByIdAndUpdate(postId, req.body, {
       new: true,
     });
