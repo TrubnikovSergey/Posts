@@ -22,7 +22,7 @@ const Layout = () => {
                 </Container>
                 <ToastContainer />
             </div>
-            <footer>1111</footer>
+            <footer></footer>
         </>
     )
 }

@@ -8,6 +8,7 @@ import {
     toggleViewPostsList
 } from "../../store/viewPostsListSlice"
 import PostsList from "../postsList"
+import SearchForm from "./serachForm"
 
 const AdminForm = () => {
     const navigate = useNavigate()
@@ -27,8 +28,8 @@ const AdminForm = () => {
 
     return (
         <>
-            <div className="d-flex">
-                <div className="me-auto">
+            <div className="d-flex justify-content-between">
+                <div>
                     <button
                         className="btn btn-primary mt-2"
                         onClick={handleClick}
@@ -36,16 +37,21 @@ const AdminForm = () => {
                         CREATE POST
                     </button>
                 </div>
-                <div className="me-2 bi bi-grid-3x3-gap-fill"></div>
-                <div className="form-check form-switch">
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="button"
-                        checked={type !== "list"}
-                        onChange={handleChange}
-                    />
-                    <br />
+                <div>
+                    <SearchForm posts={postsList} />
+                </div>
+                <div className="d-flex">
+                    <div className="me-2 bi bi-grid-3x3-gap-fill"></div>
+                    <div className="form-check form-switch">
+                        <input
+                            className="form-check-input"
+                            type="checkbox"
+                            role="button"
+                            checked={type !== "list"}
+                            onChange={handleChange}
+                        />
+                        <br />
+                    </div>
                 </div>
             </div>
             <div className="mt-5">

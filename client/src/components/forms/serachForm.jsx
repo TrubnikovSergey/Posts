@@ -10,6 +10,10 @@ const SearchForm = ({ posts, endPoint }) => {
     const handleSearch = ({ target }) => {
         setSearchValue(target.value)
     }
+    const handleSort = ({ target }) => {
+        target.classList.toggle("bi-sort-down-alt")
+        target.classList.toggle("bi-sort-down")
+    }
 
     const handleClickSearch = () => {
         if (searchValue) {
@@ -37,38 +41,37 @@ const SearchForm = ({ posts, endPoint }) => {
 
     return (
         <>
-            <div className="d-flex justify-content-center">
-                <div className="d-flex flex-column">
-                    <div className="d-flex justify-content-end m-1">
-                        <InputField
-                            className="form-control"
-                            aria-label="Recipient's username"
-                            aria-describedby="button-addon2"
-                            type="text"
-                            placeholder="Search..."
-                            onChange={handleSearch}
-                            value={searchValue}
-                        />
-                    </div>
-                </div>
-
-                <div className="d-flex m-1 align-self-stretch">
+            <div className="d-flex justify-content-center mb-3">
+                <InputField
+                    aria-label="Recipient's username"
+                    aria-describedby="button-addon2"
+                    type="text"
+                    placeholder="Search..."
+                    onChange={handleSearch}
+                    value={searchValue}
+                />
+                <div className="d-flex align-items-center">
                     <button
                         type="button"
                         onClick={handleClickSearch}
-                        className="btn btn-primary"
-                    >
-                        Search
-                    </button>
+                        className="btn btn-primary bi bi-search me-1"
+                    ></button>
+                </div>
+                <div className="d-flex align-items-center">
+                    <button
+                        type="button"
+                        onClick={handleSort}
+                        className="btn btn-primary bi bi-sort-down-alt"
+                    ></button>
                 </div>
             </div>
-            {renderPostsList}
+            {/* {renderPostsList} */}
         </>
     )
 }
 
 SearchForm.propTypes = {
-    posts: PropTypes.object,
+    posts: PropTypes.array,
     endPoint: PropTypes.string
 }
 

@@ -79,7 +79,7 @@ const PostsList = ({
         } else if (typeList === "tile") {
             render = (
                 <>
-                    <div className="d-flex flex-wrap">
+                    <div className="d-flex flex-wrap justify-content-center">
                         {items.map((post) => (
                             <div
                                 className="card container text-center m-3"
@@ -92,7 +92,7 @@ const PostsList = ({
                                 >
                                     <div className="p-3">
                                         <h3 className="card-title">
-                                            {cutString(post.body, 20)}
+                                            {cutString(post.title, 20)}
                                         </h3>
                                     </div>
 
@@ -131,59 +131,6 @@ const PostsList = ({
             render = <h1>Post list is undefinde</h1>
         }
     }
-    // if (view === "list") {
-    //     render = (
-    //         <>
-    //             {items.map((post) => (
-    //                 <div key={post._id}>
-    //                     <div className="d-flex align-items-end">
-    //                         <div className="me-auto">
-    //                             <Link to={endPoint + post._id}>
-    //                                 {post.title}
-    //                             </Link>
-    //                         </div>
-    //                         {extended ? (
-    //                             <div>
-    //                                 <button
-    //                                     className="btn btn-danger"
-    //                                     onClick={() => handleDelete(post._id)}
-    //                                 >
-    //                                     delete
-    //                                 </button>
-    //                             </div>
-    //                         ) : null}
-    //                     </div>
-    //                     <hr />
-    //                 </div>
-    //             ))}
-    //         </>
-    //     )
-    // } else {
-    //     render = (
-    //         <>
-    //             {items.map((post) => (
-    //                 <div key={post._id}>
-    //                     <div className="d-flex align-items-end">
-    //                         <div className="me-auto">
-    //                             <h1 to={endPoint + post._id}>{post.title}</h1>
-    //                         </div>
-    //                         {extended ? (
-    //                             <div>
-    //                                 <button
-    //                                     className="btn btn-danger"
-    //                                     onClick={() => handleDelete(post._id)}
-    //                                 >
-    //                                     delete
-    //                                 </button>
-    //                             </div>
-    //                         ) : null}
-    //                     </div>
-    //                     <hr />
-    //                 </div>
-    //             ))}
-    //         </>
-    //     )
-    // }
 
     return <>{render}</>
 }

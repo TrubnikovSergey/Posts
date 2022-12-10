@@ -20,8 +20,9 @@ const InputField = ({
 
     return (
         <div className="m-1">
-            <label htmlFor={name}>{label ? `${label}` : ""}</label>
-            <div className="input-group mb-3">
+            {label ? <label htmlFor={name}>{label}</label> : null}
+
+            <div className="input-group">
                 <input
                     className={`rounded form-control${className}`}
                     name={name}

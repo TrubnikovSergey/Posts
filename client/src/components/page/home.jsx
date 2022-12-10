@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import Post from "../post"
 import PostsList from "../postsList"
@@ -8,10 +8,9 @@ import SearchForm from "../forms/serachForm"
 import { getPostById, getPostsList } from "../../store/postsSlice"
 
 const Home = () => {
-    const postsInit = useSelector(getPostsList())
+    const postList = useSelector(getPostsList())
     const { postId } = useParams()
     const findePost = useSelector(getPostById(postId))
-    const [postList] = useState(postsInit)
 
     let renderPostsList = null
     let renderPost = null
