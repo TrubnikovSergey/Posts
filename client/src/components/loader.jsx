@@ -2,9 +2,9 @@ import React from "react"
 
 const Loader = () => {
     return (
-        <div className="container">
+        <div className="d-flex align-items-center">
             <span
-                className="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm text-primary"
                 role="status"
                 aria-hidden="true"
             ></span>

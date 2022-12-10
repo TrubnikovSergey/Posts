@@ -2,6 +2,7 @@ import React from "react"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import { getIsAuth, getIsAuthLoading } from "../store/authUserSlice"
+import Loader from "./loader"
 
 const NavBar = () => {
     const isAuth = useSelector(getIsAuth())
@@ -17,7 +18,8 @@ const NavBar = () => {
                 </NavLink>
             )
         } else {
-            renderMenu = "...loading..."
+            // renderMenu = "...loading..."
+            renderMenu = <Loader />
         }
     } else {
         renderMenu = (
