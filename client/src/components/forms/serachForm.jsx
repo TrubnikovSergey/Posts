@@ -1,23 +1,41 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import InputField from "../formField/inputField"
-import PostsList from "../postsList"
 import PropTypes from "prop-types"
 
-const SearchForm = ({ posts, endPoint }) => {
+const SearchForm = ({ posts, onFound, onSort }) => {
     const [searchValue, setSearchValue] = useState("")
     const [foundePosts, setFoundePosts] = useState(posts)
 
-    const handleSearch = ({ target }) => {
+    const handleChangeInput = ({ target }) => {
         setSearchValue(target.value)
     }
+
     const handleSort = ({ target }) => {
         target.classList.toggle("bi-sort-down-alt")
         target.classList.toggle("bi-sort-down")
+
+        const directionSort = target.classList.contains("bi-sort-down-alt")
+
+        const compare = (a, b) => {
+            if (a.title > b.title) {
+                return directionSort ? 1 : -1
+            }
+            if (a.title < b.title) {
+                return directionSort ? -1 : 1
+            }
+
+            return 0
+        }
+
+        const sortedPosts = [...foundePosts].sort(compare)
+
+        setFoundePosts(sortedPosts)
+        onSort(sortedPosts)
     }
 
     const handleClickSearch = () => {
         if (searchValue) {
-            const foundePostsList = posts.filter((post) => {
+            const filteredPosts = posts.filter((post) => {
                 const searchRegExp = new RegExp(`${searchValue}`)
                 const isFoundeInTitle = post.title.search(searchRegExp) !== -1
                 const isFoundeInBody = post.body.search(searchRegExp) !== -1
@@ -25,18 +43,12 @@ const SearchForm = ({ posts, endPoint }) => {
                 return isFoundeInTitle || isFoundeInBody
             })
 
-            setFoundePosts(foundePostsList)
+            setFoundePosts(filteredPosts)
+            onFound(filteredPosts)
+        } else {
+            setFoundePosts(posts)
+            onFound(posts)
         }
-    }
-
-    let renderPostsList = null
-    if (foundePosts) {
-        renderPostsList = (
-            <>
-                <h1>Found posts</h1>
-                <PostsList items={foundePosts} endPoint={endPoint} />
-            </>
-        )
     }
 
     return (
@@ -47,7 +59,7 @@ const SearchForm = ({ posts, endPoint }) => {
                     aria-describedby="button-addon2"
                     type="text"
                     placeholder="Search..."
-                    onChange={handleSearch}
+                    onChange={handleChangeInput}
                     value={searchValue}
                 />
                 <div className="d-flex align-items-center">
@@ -65,14 +77,14 @@ const SearchForm = ({ posts, endPoint }) => {
                     ></button>
                 </div>
             </div>
-            {/* {renderPostsList} */}
         </>
     )
 }
 
 SearchForm.propTypes = {
     posts: PropTypes.array,
-    endPoint: PropTypes.string
+    onFound: PropTypes.func,
+    onSort: PropTypes.func
 }
 
 export default SearchForm

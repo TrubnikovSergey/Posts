@@ -10,7 +10,6 @@ const PostsList = ({
     extended = false
 }) => {
     const { handleDelete, typeList, handleEdit } = usePostList()
-
     const cutString = (str, count) => {
         const newStr = str.slice(0, count)
 
@@ -54,17 +53,17 @@ const PostsList = ({
                                     <div className="d-flex">
                                         <button
                                             className="btn btn-success m-1"
-                                            onClick={() =>
+                                            onClick={() => {
                                                 handleEdit(endPoint + post._id)
-                                            }
+                                            }}
                                         >
                                             edit
                                         </button>
                                         <button
                                             className="btn btn-danger m-1"
-                                            onClick={() =>
+                                            onClick={() => {
                                                 handleDelete(post._id)
-                                            }
+                                            }}
                                         >
                                             delete
                                         </button>
@@ -103,19 +102,19 @@ const PostsList = ({
                                         <div className="col align-self-end mb-3">
                                             <button
                                                 className="btn btn-success me-5"
-                                                onClick={() =>
+                                                onClick={() => {
                                                     handleEdit(
                                                         endPoint + post._id
                                                     )
-                                                }
+                                                }}
                                             >
                                                 edit
                                             </button>
                                             <button
                                                 className="btn btn-danger"
-                                                onClick={() =>
+                                                onClick={() => {
                                                     handleDelete(post._id)
-                                                }
+                                                }}
                                             >
                                                 delete
                                             </button>

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import localStorageService from "../../service/localStorage.service"
@@ -15,14 +15,16 @@ const AdminForm = () => {
     const dispatch = useDispatch()
     const type = useSelector(getTypePostsList())
     const { userId } = localStorageService.getAuthUser()
+    const userPosts = useSelector(getUserPostsList(userId))
 
-    const postsList = useSelector(getUserPostsList(userId))
-
-    const handleClick = () => {
+    // //////////////////////////////////
+    const [searchValue, setSearchValue] = useState()
+    // //////////////////////////////////
+    const handleClickCreate = () => {
         navigate("/admin/new")
     }
 
-    const handleChange = () => {
+    const handleChangeView = () => {
         dispatch(toggleViewPostsList())
     }
 
@@ -32,13 +34,10 @@ const AdminForm = () => {
                 <div>
                     <button
                         className="btn btn-primary mt-2"
-                        onClick={handleClick}
+                        onClick={handleClickCreate}
                     >
                         CREATE POST
                     </button>
-                </div>
-                <div>
-                    <SearchForm posts={postsList} />
                 </div>
                 <div className="d-flex">
                     <div className="me-2 bi bi-grid-3x3-gap-fill"></div>
@@ -48,15 +47,22 @@ const AdminForm = () => {
                             type="checkbox"
                             role="button"
                             checked={type !== "list"}
-                            onChange={handleChange}
+                            onChange={handleChangeView}
                         />
                         <br />
                     </div>
                 </div>
             </div>
             <div className="mt-5">
+                {/* <div>
+                    <SearchForm
+                        posts={userPosts}
+                        onFound={handleFound}
+                        onSort={handleSort}
+                    />
+                </div> */}
                 <PostsList
-                    items={postsList}
+                    items={userPosts}
                     endPoint="/admin/"
                     extended={true}
                 />

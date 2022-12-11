@@ -20,7 +20,7 @@ const EditPostPage = () => {
     const { userId } = localStorageService.getAuthUser()
 
     const goBack = () => {
-        navigate(-1)
+        navigate("/admin")
     }
 
     const saveHandle = () => {
@@ -30,7 +30,7 @@ const EditPostPage = () => {
             dispatch(createPost({ ...data, userId }))
         }
 
-        navigate(-1)
+        navigate("/admin")
     }
 
     let render = null
