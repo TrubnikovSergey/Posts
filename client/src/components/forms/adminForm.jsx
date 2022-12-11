@@ -18,6 +18,7 @@ const AdminForm = () => {
     const userPosts = useSelector(getUserPostsList(userId))
 
     const { searchComponent, searchValue, foundPosts } = useSearch(userPosts)
+    console.log("----searchValue", searchValue)
 
     const handleClickCreate = () => {
         navigate("/admin/new")
@@ -55,7 +56,7 @@ const AdminForm = () => {
             <div className="mt-5">
                 {searchComponent}
                 <PostsList
-                    items={searchValue ? foundPosts : userPosts}
+                    items={foundPosts}
                     endPoint="/admin/"
                     extended={true}
                 />
