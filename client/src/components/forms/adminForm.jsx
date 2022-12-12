@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import useSearch from "../../hooks/useSearch"
+import useSearchSort from "../../hooks/useSearchSort"
 import localStorageService from "../../service/localStorage.service"
 import { getUserPostsList } from "../../store/postsSlice"
 import {
@@ -9,6 +9,7 @@ import {
     toggleViewPostsList
 } from "../../store/viewPostsListSlice"
 import PostsList from "../postsList"
+import SearchForm from "./searchForm"
 
 const AdminForm = () => {
     const navigate = useNavigate()
@@ -17,8 +18,8 @@ const AdminForm = () => {
     const { userId } = localStorageService.getAuthUser()
     const userPosts = useSelector(getUserPostsList(userId))
 
-    const { searchComponent, searchValue, foundPosts } = useSearch(userPosts)
-    console.log("----searchValue", searchValue)
+    const { newPostList, handleClickSort, handleClickSearch } =
+        useSearchSort(userPosts)
 
     const handleClickCreate = () => {
         navigate("/admin/new")
@@ -54,9 +55,12 @@ const AdminForm = () => {
                 </div>
             </div>
             <div className="mt-5">
-                {searchComponent}
+                <SearchForm
+                    onClickSearch={handleClickSearch}
+                    onClickSort={handleClickSort}
+                />
                 <PostsList
-                    items={foundPosts}
+                    items={newPostList}
                     endPoint="/admin/"
                     extended={true}
                 />
