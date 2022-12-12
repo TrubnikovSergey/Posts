@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import useSearchSort from "../../hooks/useSearchSort"
 import localStorageService from "../../service/localStorage.service"
+import { getAuthUser } from "../../store/authUserSlice"
 import { getUserPostsList } from "../../store/postsSlice"
 import {
     getTypePostsList,
@@ -16,6 +17,7 @@ const AdminForm = () => {
     const dispatch = useDispatch()
     const type = useSelector(getTypePostsList())
     const { userId } = localStorageService.getAuthUser()
+    const authUser = useSelector(getAuthUser())
     const userPosts = useSelector(getUserPostsList(userId))
 
     const { newPostList, handleClickSort, handleClickSearch } =
@@ -40,6 +42,14 @@ const AdminForm = () => {
                         CREATE POST
                     </button>
                 </div>
+
+                <div className="me-5 ms-5">
+                    <div>
+                        <h4 className="m-0">User: {authUser.name}</h4>
+                        <h5 className="m-0">email: {authUser.email}</h5>
+                    </div>
+                </div>
+
                 <div className="d-flex">
                     <div className="me-2 bi bi-grid-3x3-gap-fill"></div>
                     <div className="form-check form-switch">
