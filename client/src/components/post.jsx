@@ -9,25 +9,6 @@ const Post = ({ title, body }) => {
                     <h1>{title}</h1>
                 </div>
                 <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
-                <div>{body}</div>
             </div>
         </>
     )

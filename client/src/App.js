@@ -40,7 +40,7 @@ function App() {
         dispatch(postsFetchAll())
     }, [])
 
-    return postsList.length > 0 ? (
+    return (
         <>
             <Routes>
                 <Route path="/" element={<Layout />}>
@@ -67,8 +67,6 @@ function App() {
                 </Route>
             </Routes>
         </>
-    ) : (
-        <Loader />
     )
 }
 

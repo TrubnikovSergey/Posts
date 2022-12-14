@@ -25,22 +25,16 @@ const validateSchemePassword = yup.object().shape({
 router.post("/signUp", [
   check("email", "Некорректный email").isEmail(),
   body("password", "Пароль не соответствует утсановленным норма").custom(
-    (value) => {
-      const data = { password: value };
-
-      validateSchemePassword.validate(data).then(() => {
-        return true;
-      });
-      return false;
-    }
+    (password) => validateSchemePassword.isValidSync({ password })
   ),
   async (req, res) => {
     try {
       const errors = validationResult(req);
+
       if (!errors.isEmpty()) {
         return res.status(400).json({
           error: {
-            message: "INVALID_DATA",
+            message: `INVALID_DATA ${errors[0].msg}`,
             code: 400,
           },
         });

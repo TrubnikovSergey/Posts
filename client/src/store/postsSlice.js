@@ -148,7 +148,10 @@ export const getUserPostsList = (userId) => (state) => {
 }
 
 export const getPostById = (id) => (state) => {
-    return state.posts.entities.find((item) => String(item._id) === String(id))
+    const foundPost = state.posts.entities.find(
+        (item) => String(item._id) === String(id)
+    )
+    return foundPost
 }
 
 export default postReducer
