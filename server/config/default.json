@@ -1,0 +1,6 @@
+{
+    "port":8080,
+    "mongoUri":"mongodb+srv://diploma:j7raCrUIrpagj1kX@cluster0.0iw3cq3.mongodb.net/?retryWrites=true&w=majority",
+    "accessSecret":"Diploma of Trubnikov Sergey 2022",
+    "refreshSecret": "New nice token for Diploma of Trubnikov Sergey 2022"
+}
