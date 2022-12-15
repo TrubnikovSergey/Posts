@@ -114,8 +114,11 @@ export const signIn = (email, password) => async (dispatch) => {
     dispatch(requestUserSignIn())
     try {
         const data = await userService.login(email, password)
+        const { user } = data
+        delete data.user
+
         localStorageService.setAuthUser(data)
-        dispatch(receiveUser(data))
+        dispatch(receiveUser(user))
     } catch (error) {
         const message = error.message
 

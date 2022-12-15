@@ -5,7 +5,9 @@ const url = config.backendEndPoint + "posts"
 
 const postService = {
     fetchAll: async () => {
-        const { data } = await httpService.get(url)
+        const content = await httpService.get(url)
+        const { data } = content
+
         return data
     },
     async create(post, accessToken, refreshToken) {

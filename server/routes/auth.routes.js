@@ -134,7 +134,9 @@ router.post("/signIn", [
       const tokens = tokenService.generate({ _id: existingUser._id });
       await tokenService.save(existingUser._id, tokens.refreshToken);
 
-      res.status(200).send({ ...tokens, userId: existingUser._id });
+      res
+        .status(200)
+        .send({ ...tokens, userId: existingUser._id, user: existingUser });
     } catch (e) {
       res.status(500).json({
         message: `На сервере произошла ошибка. Попробуйте позже.`,

@@ -8,6 +8,7 @@ router.get("/", async (req, res) => {
     const list = await Post.find();
     res.status(200).send(list);
   } catch (e) {
+    console.log("---Erorr---/", e);
     res
       .status(500)
       .json({ message: "На сервере произошла ошибка. Попробуйте позже." });
@@ -18,7 +19,7 @@ router.post("/new", auth, async (req, res) => {
   try {
     const newPost = await Post.create(req.body);
 
-    res.status(201).send(newPost);
+    res.status(201).json(newPost);
   } catch (e) {
     console.log(e);
     res
@@ -34,7 +35,7 @@ router.delete("/:postId", auth, async (req, res) => {
 
     await removeedPost.remove();
 
-    return res.send(null);
+    return res.json(null);
   } catch (e) {
     console.log(e);
     res
@@ -50,7 +51,7 @@ router.patch("/:postId", auth, async (req, res) => {
       new: true,
     });
 
-    res.send(updatedPost);
+    res.json(updatedPost);
   } catch (e) {
     console.log(e);
     res

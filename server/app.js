@@ -14,11 +14,10 @@ const PORT = config.get("port") ?? 8080;
 if (process.env.NODE_ENV === "prodaction") {
   app.use("/", express.static(path.join(__dirname, "client")));
 
-  const indexPath = path.join(__dirname, "client", "index.html");
-
-  app.get("*", (req, res) => {
-    res.sendFile(indexPath);
-  });
+  // const indexPath = path.join(__dirname, "client", "index.html");
+  // app.get("*", (req, res) => {
+  //   res.sendFile(indexPath);
+  // });
 }
 
 app.use(express.json());
