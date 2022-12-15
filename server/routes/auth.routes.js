@@ -61,7 +61,10 @@ router.post("/signUp", [
       const tokens = tokenService.generate({ _id: newUser._id });
       await tokenService.save(newUser._id, tokens.refreshToken);
 
-      res.status(201).send({ ...tokens, userId: newUser._id });
+      res.status(201).send({
+        tokens: { ...tokens, userId: newUser._id },
+        user: newUser,
+      });
     } catch (e) {
       res.status(500).json({
         message: `На сервере произошла ошибка. Попробуйте позже.`,
@@ -71,7 +74,7 @@ router.post("/signUp", [
 ]);
 
 router.post("/signInWithToken", async (req, res) => {
-  const { userId: _id, accessToken, refreshToken } = req.body;
+  const { userId: _id, accessToken, refreshToken, expiresIn } = req.body;
   const isValidAccessToken = tokenService.validateAccess(accessToken);
   const isValidRefreshToken = tokenService.validateRefresh(refreshToken);
 
@@ -85,7 +88,10 @@ router.post("/signInWithToken", async (req, res) => {
   }
 
   const existingUser = await User.findOne({ _id });
-  res.status(200).send(existingUser);
+  res.status(200).send({
+    tokens: { userId: _id, accessToken, refreshToken, expiresIn },
+    user: existingUser,
+  });
 });
 
 router.post("/signIn", [
@@ -134,9 +140,10 @@ router.post("/signIn", [
       const tokens = tokenService.generate({ _id: existingUser._id });
       await tokenService.save(existingUser._id, tokens.refreshToken);
 
-      res
-        .status(200)
-        .send({ ...tokens, userId: existingUser._id, user: existingUser });
+      res.status(200).send({
+        tokens: { ...tokens, userId: existingUser._id },
+        user: existingUser,
+      });
     } catch (e) {
       res.status(500).json({
         message: `На сервере произошла ошибка. Попробуйте позже.`,

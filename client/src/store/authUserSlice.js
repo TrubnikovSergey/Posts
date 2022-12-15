@@ -50,7 +50,7 @@ const {
 } = actions
 
 export const getAuthUser = () => (state) => {
-    return state.authUser.entities
+    return state.authUser.entities.user
 }
 
 export const getIsAuth = () => (state) => {
@@ -65,12 +65,14 @@ export const getAuthError = () => (state) => {
     return state.authUser.error
 }
 
-export const signUp = (user) => async (dispatch) => {
+export const signUp = (newUser) => async (dispatch) => {
     dispatch(requestSignUp())
     try {
-        const data = await userService.create(user)
-        dispatch(receiveUser(data))
-        localStorageService.setAuthUser(data)
+        const data = await userService.create(newUser)
+        const { tokens, user } = data
+
+        dispatch(receiveUser({ ...tokens, user }))
+        localStorageService.setAuthUser(tokens)
     } catch (error) {
         const message = error.message
 
@@ -114,11 +116,10 @@ export const signIn = (email, password) => async (dispatch) => {
     dispatch(requestUserSignIn())
     try {
         const data = await userService.login(email, password)
-        const { user } = data
-        delete data.user
+        const { tokens, user } = data
 
-        localStorageService.setAuthUser(data)
-        dispatch(receiveUser(user))
+        localStorageService.setAuthUser(tokens)
+        dispatch(receiveUser({ ...tokens, user }))
     } catch (error) {
         const message = error.message
 

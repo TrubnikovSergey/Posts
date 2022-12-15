@@ -4,7 +4,8 @@ import InputField from "../formField/inputField"
 import * as yup from "yup"
 import RadioField from "../formField/radioField"
 import { useDispatch, useSelector } from "react-redux"
-import { getIsAuth, signUp } from "../../store/authUserSlice"
+import { getAuthError, getIsAuth, signUp } from "../../store/authUserSlice"
+import { toast } from "react-toastify"
 
 const RegForm = () => {
     const [data, setData] = useState({
@@ -16,6 +17,7 @@ const RegForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const isAuth = useSelector(getIsAuth())
+    const authError = useSelector(getAuthError())
     const [error, setError] = useState({})
 
     const handleChange = (e) => {
@@ -24,10 +26,14 @@ const RegForm = () => {
     }
 
     useEffect(() => {
-        if (isAuth) {
+        if (!isAuth) {
+            if (authError) {
+                toast.error(authError)
+            }
+        } else {
             navigate("/")
         }
-    }, [isAuth])
+    }, [isAuth, authError])
 
     useEffect(() => {
         validateScheme
