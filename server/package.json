@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=prodaction node app.js",
+    "start": "cross-env NODE_ENV=production node app.js",
     "serve": "cross-env NODE_ENV=development nodemon app.js"
   },
   "author": "",
