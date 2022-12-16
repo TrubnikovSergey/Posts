@@ -8,7 +8,7 @@ const Post = ({ title, body }) => {
                 <div>
                     <h1>{title}</h1>
                 </div>
-                <div>{body}</div>
+                <div className="tsa-post-body">{body}</div>
             </div>
         </>
     )
