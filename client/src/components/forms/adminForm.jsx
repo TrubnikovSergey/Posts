@@ -20,8 +20,13 @@ const AdminForm = () => {
     const authUser = useSelector(getAuthUser())
     const userPosts = useSelector(getUserPostsList(userId))
 
-    const { newPostList, handleClickSort, handleClickSearch } =
-        useSearchSort(userPosts)
+    const {
+        newPostList,
+        handleClickSort,
+        handleClickSearch,
+        handleClickRegistr,
+        registr
+    } = useSearchSort(userPosts)
 
     const handleClickCreate = () => {
         navigate("/admin/new")
@@ -68,6 +73,8 @@ const AdminForm = () => {
                 <SearchForm
                     onClickSearch={handleClickSearch}
                     onClickSort={handleClickSort}
+                    onClickRegistr={handleClickRegistr}
+                    registr={registr}
                 />
                 <PostsList
                     items={newPostList}

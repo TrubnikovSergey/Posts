@@ -2,7 +2,12 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import InputField from "../formField/inputField"
 
-const SearchForm = ({ onClickSearch, onClickSort }) => {
+const SearchForm = ({
+    onClickSearch,
+    onClickSort,
+    onClickRegistr,
+    registr
+}) => {
     const [searchValue, setSearchValue] = useState("")
 
     const handleChangeInput = ({ target }) => {
@@ -16,6 +21,10 @@ const SearchForm = ({ onClickSearch, onClickSort }) => {
         onClickSort(target)
     }
 
+    const handleClickRegistr = () => {
+        onClickRegistr()
+    }
+
     const handleClickSearch = () => {
         onClickSearch(searchValue)
     }
@@ -23,6 +32,19 @@ const SearchForm = ({ onClickSearch, onClickSort }) => {
     return (
         <>
             <div className="d-flex justify-content-center mb-3">
+                <div className="d-flex align-items-center">
+                    <button
+                        type="button"
+                        onClick={handleClickRegistr}
+                        className={
+                            registr
+                                ? "btn btn-primary"
+                                : "btn btn-outline-primary"
+                        }
+                    >
+                        <i className="bi bi-type"></i>
+                    </button>
+                </div>
                 <InputField
                     aria-label="Recipient's username"
                     aria-describedby="button-addon2"
@@ -53,7 +75,9 @@ const SearchForm = ({ onClickSearch, onClickSort }) => {
 SearchForm.propTypes = {
     onChangeInput: PropTypes.func,
     onClickSearch: PropTypes.func,
-    onClickSort: PropTypes.func
+    onClickSort: PropTypes.func,
+    onClickRegistr: PropTypes.func,
+    registr: PropTypes.bool
 }
 
 export default SearchForm

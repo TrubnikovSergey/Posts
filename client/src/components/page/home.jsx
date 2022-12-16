@@ -11,8 +11,13 @@ const Home = () => {
     const postsList = useSelector(getPostsList())
     const { postId } = useParams()
     const onePost = useSelector(getPostById(postId))
-    const { newPostList, handleClickSort, handleClickSearch } =
-        useSearchSort(postsList)
+    const {
+        newPostList,
+        handleClickSort,
+        handleClickSearch,
+        handleClickRegistr,
+        registr
+    } = useSearchSort(postsList)
 
     let renderPostsList = null
     let renderPost = null
@@ -31,6 +36,8 @@ const Home = () => {
                     <SearchForm
                         onClickSearch={handleClickSearch}
                         onClickSort={handleClickSort}
+                        onClickRegistr={handleClickRegistr}
+                        registr={registr}
                     />
                 </div>
                 <div className="tsa_scrollbar tsa_height">

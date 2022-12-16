@@ -3,14 +3,17 @@ import { useState } from "react"
 const useSearchSort = (userPosts) => {
     const [searchValue, setSearchValue] = useState("")
     const [sortType, setSortType] = useState("asc")
+    const [registr, setRegistr] = useState(false)
 
     const newPostList = sortPosts(sortType, filterPosts(userPosts, searchValue))
 
     function filterPosts(posts, valueSearch) {
         let foundPosts = posts
         if (valueSearch) {
+            const flagI = registr ? "" : "i"
+
             foundPosts = posts.filter((post) => {
-                const searchRegExp = new RegExp(`${valueSearch}`)
+                const searchRegExp = new RegExp(`${valueSearch}`, flagI)
                 const isFoundeInTitle = post.title.search(searchRegExp) !== -1
                 const isFoundeInBody = post.body.search(searchRegExp) !== -1
 
@@ -19,6 +22,10 @@ const useSearchSort = (userPosts) => {
         }
 
         return foundPosts
+    }
+
+    const handleClickRegistr = () => {
+        setRegistr((prev) => !prev)
     }
 
     const handleClickSearch = (value) => {
@@ -49,7 +56,13 @@ const useSearchSort = (userPosts) => {
         }
     }
 
-    return { newPostList, handleClickSort, handleClickSearch }
+    return {
+        newPostList,
+        registr,
+        handleClickSort,
+        handleClickSearch,
+        handleClickRegistr
+    }
 }
 
 export default useSearchSort
