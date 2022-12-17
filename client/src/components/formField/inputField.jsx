@@ -8,6 +8,7 @@ const InputField = ({
     placeholder,
     value,
     onChange,
+    onKeyDown,
     error
 }) => {
     const isError = error && Object.keys(error).length > 0 && name in error
@@ -31,6 +32,7 @@ const InputField = ({
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
+                    onKeyDown={onKeyDown}
                 />
                 {type === "password" ? (
                     <span
@@ -62,7 +64,8 @@ InputField.propTypes = {
     label: PropTypes.string,
     name: PropTypes.string,
     error: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onKeyDown: PropTypes.func
 }
 
 export default InputField

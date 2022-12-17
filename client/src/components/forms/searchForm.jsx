@@ -29,13 +29,22 @@ const SearchForm = ({
         onClickSearch(searchValue)
     }
 
+    const handleClickEnter = (e) => {
+        if (e.keyCode === 13) {
+            onClickSearch(searchValue)
+        }
+    }
+
     return (
         <>
             <div className="d-flex justify-content-center mb-3">
                 <div className="d-flex align-items-center">
                     <button
                         type="button"
-                        onClick={handleClickRegistr}
+                        onClick={() => {
+                            handleClickRegistr()
+                            onClickSearch(searchValue)
+                        }}
                         className={
                             registr
                                 ? "btn btn-primary"
@@ -51,6 +60,7 @@ const SearchForm = ({
                     type="text"
                     placeholder="Search..."
                     onChange={handleChangeInput}
+                    onKeyDown={handleClickEnter}
                     value={searchValue}
                 />
                 <div className="d-flex align-items-center">
