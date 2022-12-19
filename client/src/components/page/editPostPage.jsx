@@ -21,7 +21,7 @@ const EditPostPage = () => {
         : useState({ title: "", body: "" })
 
     let initEditor = EditorState.createEmpty()
-    console.log(data.body)
+
     useEffect(() => {
         if (data.body) {
             const contentBlock = htmlToDraft(data.body)

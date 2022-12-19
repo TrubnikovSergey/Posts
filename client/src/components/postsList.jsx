@@ -20,6 +20,10 @@ const PostsList = ({
         return newStr
     }
 
+    const deleteHTMLFromText = (text) => {
+        return text.replace(/<(.|\n)*?>/g, "").replace(/&(.|\n)*?;/g, "")
+    }
+
     let render = null
 
     if (view === "list" && !extended) {
@@ -96,7 +100,10 @@ const PostsList = ({
                                     </div>
 
                                     <div className="card-text">
-                                        {cutString(post.body, 20)}
+                                        {cutString(
+                                            deleteHTMLFromText(post.body),
+                                            30
+                                        )}
                                     </div>
                                     {extended ? (
                                         <div className="col align-self-end mb-3">
