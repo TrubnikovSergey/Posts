@@ -1,3 +1,9 @@
 .tsa-white-space{
   white-space: pre-wrap;
 }
+
+.editor-class.rdw-editor-main {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 0px 15px;
+}
