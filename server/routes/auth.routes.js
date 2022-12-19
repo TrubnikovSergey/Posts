@@ -95,7 +95,7 @@ router.post("/signInWithToken", async (req, res) => {
 });
 
 router.post("/signIn", [
-  check("email", "Email некорректный").normalizeEmail().isEmail(),
+  check("email", "Email некорректный").isEmail(),
   body("password", "Пароль не соответствует утсановленным нормам").custom(
     (password) => validateSchemePassword.isValidSync({ password })
   ),
@@ -113,7 +113,7 @@ router.post("/signIn", [
       }
       const { email, password } = req.body;
       const existingUser = await User.findOne({ email });
-
+      console.log("-------", { email, password });
       if (!existingUser) {
         return res.status(400).send({
           error: {
