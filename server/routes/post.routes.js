@@ -15,6 +15,35 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:_id", async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const post = await Post.findOne({ _id });
+    res.status(200).send(post);
+  } catch (e) {
+    console.log("---Erorr---/", e);
+    res
+      .status(500)
+      .json({ message: "На сервере произошла ошибка. Попробуйте позже." });
+  }
+});
+
+router.post("/paginate", async (req, res) => {
+  const { startIndex, count } = req.body;
+
+  try {
+    const postsList = await Post.find().skip(startIndex).limit(count);
+    const totalCount = await Post.find().length;
+
+    res.status(201).send({ postsList, totalCount });
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ message: "На сервере произошла ошибка. Попробуйте позже." });
+  }
+});
+
 router.post("/new", auth, async (req, res) => {
   try {
     const newPost = await Post.create(req.body);

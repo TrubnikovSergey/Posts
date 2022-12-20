@@ -1,3 +1,3 @@
 export default {
-    backendEndPoint: "http://84.38.183.209/api/"
+    backendEndPoint: "http://localhost:8080/api/"
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import _ from "lodash"
 import PropTypes from "prop-types"
+import utils from "../util"
 
 const Pagination = ({
     totalCountPages,
@@ -10,7 +10,9 @@ const Pagination = ({
 }) => {
     const [pages, setPages] = useState()
     useEffect(() => {
-        setPages(_.range(1, Math.min(totalCountPages, paginationSize) + 1))
+        setPages(
+            utils.getArrayNumbers(Math.min(totalCountPages, paginationSize) + 1)
+        )
     }, [])
 
     const classLiItem = "page-item"
