@@ -10,6 +10,8 @@ import Pagination from "../pagination"
 import utils from "../../util"
 
 const Home = () => {
+    const [currentPage, setCurrentPage] = useState()
+
     const postsList = useSelector(getPostsList())
     const { postId } = useParams()
     const paginate = useSelector(getPaginate())
@@ -21,7 +23,7 @@ const Home = () => {
         handleClickRegistr,
         registr
     } = useSearchSort(postsList)
-
+    console.log("----Home")
     let renderPostsList = null
     let renderPost = null
 
@@ -37,6 +39,10 @@ const Home = () => {
 
     const handleChangePage = () => {
         console.log("-----handleChangePage")
+    }
+
+    const handleSelectPage = (page) => {
+        setCurrentPage(page)
     }
 
     return (
@@ -55,10 +61,9 @@ const Home = () => {
                     {renderPostsList}
                 </div>
                 <Pagination
-                    currentPage={paginate.currentPage}
-                    handleChangePage={handleChangePage}
-                    paginationSize={paginate.sizePage}
-                    totalCountPages={calculateCountPages(paginate)}
+                    listPage={utils.getArrayNumbers(4)}
+                    onSelectPage={handleSelectPage}
+                    currentPage={currentPage}
                 />
             </div>
             <div className="col-7 shadow-lg p-3 m-2 mb-5 bg-body rounded">
