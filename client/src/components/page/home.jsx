@@ -1,67 +1,185 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Post from "../post"
 import PostsList from "../postsList"
 import { useSelector } from "react-redux"
 import { getPaginate, getPostById, getPostsList } from "../../store/postsSlice"
-import SearchForm from "../forms/searchForm"
-import useSearchSort from "../../hooks/useSearchSort"
+// import SearchForm from "../forms/searchForm"
+// import useSearchSort from "../../hooks/useSearchSort"
 import Pagination from "../pagination"
 import utils from "../../util"
+import postService from "../../service/post.service"
+import Loader from "../loader"
+import InputField from "../formField/inputField"
 
 const Home = () => {
-    const [currentPage, setCurrentPage] = useState()
-
-    const postsList = useSelector(getPostsList())
+    const sizePage = 9
+    const sizeListPaginate = 2
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsList, setPostsList] = useState()
+    const [post, setPost] = useState()
+    const [firstPagePaginate, setFirstPagePaginate] = useState(1)
+    const [totalCountPosts, setTotalCountPosts] = useState()
     const { postId } = useParams()
+    const [searchValue, setSearchValue] = useState("")
+    const [toggle, setToggle] = useState(true)
+
+    useEffect(() => {
+        if (postId) {
+            postService.getPostById(postId).then((data) => {
+                setPost(data)
+            })
+
+            if (postId !== post?._id) {
+                setPost(null)
+            }
+        }
+    }, [postId])
+
+    useEffect(() => {
+        if (searchValue) {
+            const idx = (currentPage - 1) * sizePage
+
+            postService
+                .fetchPaginateWithSearch({
+                    searchValue,
+                    registr: true,
+                    startIndex: idx,
+                    count: sizePage
+                })
+                .then((data) => {
+                    setPostsList(data.postsList)
+                    setTotalCountPosts(data.totalCount)
+                })
+        } else {
+            const idx = (currentPage - 1) * sizePage
+
+            postService.fetchPaginate(idx, sizePage).then((data) => {
+                setPostsList(data.postsList)
+                setTotalCountPosts(data.totalCount)
+            })
+        }
+    }, [currentPage, toggle])
+
+    // const postsList = useSelector(getPostsList())
     const paginate = useSelector(getPaginate())
     const onePost = useSelector(getPostById(postId))
-    const {
-        newPostList,
-        handleClickSort,
-        handleClickSearch,
-        handleClickRegistr,
-        registr
-    } = useSearchSort(postsList)
-    console.log("----Home")
+    // const {
+    //     newPostList,
+    //     handleClickSort,
+    //     handleClickSearch,
+    //     handleClickRegistr,
+    //     registr
+    // } = useSearchSort(postsList)
     let renderPostsList = null
     let renderPost = null
 
-    renderPostsList = <PostsList items={newPostList} />
+    renderPostsList = <PostsList items={postsList} />
 
-    if (postId && onePost) {
-        renderPost = <Post title={onePost.title} body={onePost.body} />
-    }
-
-    const calculateCountPages = (pgn) => {
-        return utils.div(pgn.totalCount / pgn.sizePage)
-    }
-
-    const handleChangePage = () => {
-        console.log("-----handleChangePage")
+    if (postId) {
+        renderPost = <Post post={post} />
     }
 
     const handleSelectPage = (page) => {
-        setCurrentPage(page)
+        if (currentPage === page) {
+            return
+        }
+
+        if (page > 0) {
+            setCurrentPage(page)
+            setPostsList([])
+        } else {
+            const isRightExistsPagePginate =
+                (firstPagePaginate - 1 + sizeListPaginate) * sizePage <
+                totalCountPosts
+            const isLeftExistsPagePginate = firstPagePaginate > 1
+
+            if (page === -1 && isRightExistsPagePginate) {
+                setFirstPagePaginate(firstPagePaginate + sizeListPaginate)
+                setCurrentPage(firstPagePaginate + sizeListPaginate)
+            }
+            if (page === -2 && isLeftExistsPagePginate) {
+                setFirstPagePaginate(firstPagePaginate - sizeListPaginate)
+                setCurrentPage(firstPagePaginate - sizeListPaginate)
+            }
+        }
     }
 
-    return (
+    const calculateListPage = () => {
+        const paginateCountPosts = (firstPagePaginate - 1) * sizePage
+        const differencePosts = totalCountPosts - paginateCountPosts
+
+        const isCountPostsSufficeForListPaginate =
+            Math.ceil(differencePosts / sizePage) >= sizeListPaginate
+
+        let arrayNumber = []
+
+        if (isCountPostsSufficeForListPaginate) {
+            arrayNumber = utils.getArrayNumbers(
+                firstPagePaginate + sizeListPaginate
+            )
+        } else {
+            const sizeListPaginateDiff = Math.ceil(differencePosts / sizePage)
+
+            arrayNumber = utils.getArrayNumbers(
+                firstPagePaginate + sizeListPaginateDiff
+            )
+        }
+
+        return arrayNumber.slice(firstPagePaginate - 1)
+    }
+
+    const handleSearchInput = ({ target }) => {
+        setSearchValue(target.value)
+    }
+
+    const handleSearchClick = () => {
+        setToggle((prev) => !prev)
+        // const idx = (currentPage - 1) * sizePage
+
+        // const foundPosts = postService
+        //     .fetchPaginateWithSearch({
+        //         searchValue,
+        //         registr: true,
+        //         startIndex: idx,
+        //         count: sizePage
+        //     })
+        //     .then((data) => {
+        //         setPostsList(data.postsList)
+        //         setTotalCountPosts(data.totalCount)
+        //     })
+        setCurrentPage(1)
+        setPostsList([])
+
+        // console.log(foundPosts)
+    }
+
+    return postsList ? (
         <>
             <div className="col-4 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                 <div>
                     <h1>Posts</h1>
-                    <SearchForm
+                    <InputField
+                        label="Search"
+                        value={searchValue}
+                        onChange={handleSearchInput}
+                    />
+                    <button onClick={handleSearchClick}>Search</button>
+                    {/* <SearchForm
                         onClickSearch={handleClickSearch}
                         onClickSort={handleClickSort}
                         onClickRegistr={handleClickRegistr}
                         registr={registr}
-                    />
+                    /> */}
                 </div>
-                <div className="tsa_scrollbar tsa_height">
+                <div
+                    className="d-inline-block"
+                    style={{ width: "100%", height: sizePage * 60 + "px" }}
+                >
                     {renderPostsList}
                 </div>
                 <Pagination
-                    listPage={utils.getArrayNumbers(4)}
+                    listPage={calculateListPage()}
                     onSelectPage={handleSelectPage}
                     currentPage={currentPage}
                 />
@@ -70,6 +188,8 @@ const Home = () => {
                 {renderPost}
             </div>
         </>
+    ) : (
+        <Loader />
     )
 }
 

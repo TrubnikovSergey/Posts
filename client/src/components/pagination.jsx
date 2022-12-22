@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
-import utils from "../util"
 
 // const Pagination = ({
 //     totalCountPages,
@@ -10,7 +9,6 @@ import utils from "../util"
 // }) => {
 const Pagination = ({ listPage, onSelectPage, currentPage }) => {
     // const [pages, setPages] = useState()
-    console.log(currentPage)
     // useEffect(() => {
     //     setPages(
     //         utils.getArrayNumbers(Math.min(totalCountPages, paginationSize) + 1)

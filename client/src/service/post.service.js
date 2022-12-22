@@ -9,6 +9,11 @@ const postService = {
 
         return data
     },
+    async fetchPaginateWithSearch(search) {
+        const { data } = await httpService.post(url + "/search", search)
+
+        return data
+    },
     async fetchPaginate(startIndex, count) {
         const { data } = await httpService.post(url + "/paginate", {
             startIndex,
