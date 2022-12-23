@@ -3,26 +3,54 @@ import { useParams } from "react-router-dom"
 import Post from "../post"
 import PostsList from "../postsList"
 import { useSelector } from "react-redux"
-import { getPaginate, getPostById, getPostsList } from "../../store/postsSlice"
-// import SearchForm from "../forms/searchForm"
-// import useSearchSort from "../../hooks/useSearchSort"
+import { getPaginate } from "../../store/postsSlice"
+import SearchForm from "../forms/searchForm"
 import Pagination from "../pagination"
 import utils from "../../util"
 import postService from "../../service/post.service"
 import Loader from "../loader"
-import InputField from "../formField/inputField"
 
 const Home = () => {
-    const sizePage = 9
-    const sizeListPaginate = 2
+    const { sizePage, sizeListPaginate } = useSelector(getPaginate())
     const { postId } = useParams()
     const [currentPage, setCurrentPage] = useState(1)
-    const [postsList, setPostsList] = useState()
+    const [postsList, setPostsList] = useState([])
     const [post, setPost] = useState()
     const [firstPagePaginate, setFirstPagePaginate] = useState(1)
     const [totalCountPosts, setTotalCountPosts] = useState()
     const [searchValue, setSearchValue] = useState("")
     const [toggle, setToggle] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
+
+    const [registr, setRegistr] = useState(false)
+    const [sortType, setSortType] = useState("asc")
+
+    const handleClickRegistr = () => {
+        if (searchValue) {
+            setRegistr((prev) => !prev)
+        }
+    }
+    const handleClickSearch = (value) => {
+        setSearchValue(value)
+
+        if (value) {
+            setToggle((prev) => !prev)
+
+            setCurrentPage(1)
+            setFirstPagePaginate(1)
+            setPostsList([])
+        }
+    }
+    const handleClickSort = (target) => {
+        if (target.classList.contains("bi-sort-down-alt")) {
+            setSortType("asc")
+        } else {
+            setSortType("desc")
+        }
+
+        setCurrentPage(1)
+        setPostsList([])
+    }
 
     useEffect(() => {
         if (postId) {
@@ -43,23 +71,28 @@ const Home = () => {
             postService
                 .fetchPaginateWithSearch({
                     searchValue,
-                    registr: true,
+                    sortType,
+                    registr,
                     startIndex: idx,
                     count: sizePage
                 })
                 .then((data) => {
                     setPostsList(data.postsList)
                     setTotalCountPosts(data.totalCount)
+                    setIsLoading(false)
                 })
         } else {
             const idx = (currentPage - 1) * sizePage
 
-            postService.fetchPaginate(idx, sizePage).then((data) => {
-                setPostsList(data.postsList)
-                setTotalCountPosts(data.totalCount)
-            })
+            postService
+                .fetchPaginate({ startIndex: idx, count: sizePage, sortType })
+                .then((data) => {
+                    setPostsList(data.postsList)
+                    setTotalCountPosts(data.totalCount)
+                    setIsLoading(false)
+                })
         }
-    }, [currentPage, toggle])
+    }, [currentPage, searchValue, sortType, toggle])
 
     const handleSelectPage = (page) => {
         if (currentPage === page) {
@@ -110,43 +143,26 @@ const Home = () => {
         return arrayNumber.slice(firstPagePaginate - 1)
     }
 
-    const handleSearchInput = ({ target }) => {
-        setSearchValue(target.value)
-    }
-
-    const handleSearchClick = () => {
-        setToggle((prev) => !prev)
-
-        setCurrentPage(1)
-        setPostsList([])
-    }
-
     let renderPostsList = null
     let renderPost = null
 
-    renderPostsList = <PostsList items={postsList} />
+    renderPostsList = <PostsList items={postsList} isLoading={isLoading} />
 
     if (postId) {
         renderPost = <Post post={post} />
     }
 
-    return postsList ? (
+    return !isLoading ? (
         <>
             <div className="col-4 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                 <div>
                     <h1>Posts</h1>
-                    <InputField
-                        label="Search"
-                        value={searchValue}
-                        onChange={handleSearchInput}
-                    />
-                    <button onClick={handleSearchClick}>Search</button>
-                    {/* <SearchForm
+                    <SearchForm
                         onClickSearch={handleClickSearch}
                         onClickSort={handleClickSort}
                         onClickRegistr={handleClickRegistr}
                         registr={registr}
-                    /> */}
+                    />
                 </div>
                 <div
                     className="d-inline-block"

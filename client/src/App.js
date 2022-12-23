@@ -29,7 +29,7 @@ function App() {
     const dispatch = useDispatch()
     const authUser = localStorageService.getAuthUser()
     const postsList = useSelector(getPostsList())
-    const paginate = useSelector(getPaginate())
+    const { sizePage } = useSelector(getPaginate())
     const authError = useSelector(getAuthError())
     const isAuth = useSelector(getIsAuth())
 
@@ -43,7 +43,13 @@ function App() {
         if (authUser) {
             dispatch(signInWithToken(authUser))
         }
-        dispatch(postsFetchPaginate(0, paginate.sizePage))
+        dispatch(
+            postsFetchPaginate({
+                startIndex: 0,
+                count: sizePage,
+                sortType: "asc"
+            })
+        )
     }, [])
 
     return (

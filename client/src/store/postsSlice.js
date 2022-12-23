@@ -6,9 +6,8 @@ const postSlice = createSlice({
     name: "posts",
     initialState: {
         entities: [],
-        currentPage: 0,
-        sizePage: 5,
-        totalCount: 0,
+        sizeListPaginate: 2,
+        sizePage: 9,
         isLoading: false,
         error: null
     },
@@ -112,10 +111,10 @@ export const postsFetchAll = () => async (dispatch) => {
     }
 }
 
-export const postsFetchPaginate = (startIndex, count) => async (dispatch) => {
+export const postsFetchPaginate = (reqBody) => async (dispatch) => {
     dispatch(requestPostsPaginate())
     try {
-        const content = await postService.fetchPaginate(startIndex, count)
+        const content = await postService.fetchPaginate(reqBody)
         dispatch(receivePostsPaginate(content))
     } catch (error) {
         dispatch(requestPostsPaginateFailed(error.message))
@@ -169,9 +168,8 @@ export const createPost = (post) => async (dispatch) => {
 
 export const getPaginate = () => (state) => {
     return {
-        currentPage: state.posts.currentPage,
         sizePage: state.posts.sizePage,
-        totalCount: state.posts.totalCount
+        sizeListPaginate: state.posts.sizeListPaginate
     }
 }
 

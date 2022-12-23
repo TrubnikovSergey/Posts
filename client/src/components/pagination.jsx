@@ -35,7 +35,6 @@ const Pagination = ({ listPage, onSelectPage, currentPage }) => {
     // }
 
     const handleChangePage = ({ target }) => {
-        // console.log("-------page", String(target.text) === "»")
         let page = null
         switch (target.text) {
             case "«":
@@ -53,36 +52,46 @@ const Pagination = ({ listPage, onSelectPage, currentPage }) => {
     }
 
     return (
-        <ul className="pagination pagination-sm justify-content-center">
-            <li className="page-item">
-                <a className="page-link" href="#" onClick={handleChangePage}>
-                    &laquo;
-                </a>
-            </li>
-            {listPage.map((page) => (
-                <li
-                    key={page}
-                    className={
-                        currentPage === page
-                            ? classLiItem + " active"
-                            : classLiItem
-                    }
-                >
+        listPage.length > 0 && (
+            <ul className="pagination pagination-sm justify-content-center">
+                <li className="page-item">
                     <a
                         className="page-link"
                         href="#"
                         onClick={handleChangePage}
                     >
-                        {page}
+                        &laquo;
                     </a>
                 </li>
-            ))}
-            <li className="page-item">
-                <a className="page-link" href="#" onClick={handleChangePage}>
-                    &raquo;
-                </a>
-            </li>
-        </ul>
+                {listPage.map((page) => (
+                    <li
+                        key={page}
+                        className={
+                            currentPage === page
+                                ? classLiItem + " active"
+                                : classLiItem
+                        }
+                    >
+                        <a
+                            className="page-link"
+                            href="#"
+                            onClick={handleChangePage}
+                        >
+                            {page}
+                        </a>
+                    </li>
+                ))}
+                <li className="page-item">
+                    <a
+                        className="page-link"
+                        href="#"
+                        onClick={handleChangePage}
+                    >
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        )
     )
 }
 

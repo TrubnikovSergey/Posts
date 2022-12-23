@@ -14,11 +14,8 @@ const postService = {
 
         return data
     },
-    async fetchPaginate(startIndex, count) {
-        const { data } = await httpService.post(url + "/paginate", {
-            startIndex,
-            count
-        })
+    async fetchPaginate(reqBody) {
+        const { data } = await httpService.post(url + "/paginate", reqBody)
 
         return data
     },
