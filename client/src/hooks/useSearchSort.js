@@ -5,6 +5,14 @@ const useSearchSort = (userPosts) => {
     const [sortType, setSortType] = useState("asc")
     const [registr, setRegistr] = useState(false)
 
+    // const [currentPage, setCurrentPage] = useState(1)
+    // const [postsList, setPostsList] = useState()
+    // const [post, setPost] = useState()
+    // const [firstPagePaginate, setFirstPagePaginate] = useState(1)
+    // const [totalCountPosts, setTotalCountPosts] = useState()
+    // const [searchValue, setSearchValue] = useState("")
+    // const [toggle, setToggle] = useState(true)
+
     const newPostList = sortPosts(sortType, filterPosts(userPosts, searchValue))
 
     function filterPosts(posts, valueSearch) {

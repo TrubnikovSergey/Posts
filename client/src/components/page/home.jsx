@@ -15,12 +15,12 @@ import InputField from "../formField/inputField"
 const Home = () => {
     const sizePage = 9
     const sizeListPaginate = 2
+    const { postId } = useParams()
     const [currentPage, setCurrentPage] = useState(1)
     const [postsList, setPostsList] = useState()
     const [post, setPost] = useState()
     const [firstPagePaginate, setFirstPagePaginate] = useState(1)
     const [totalCountPosts, setTotalCountPosts] = useState()
-    const { postId } = useParams()
     const [searchValue, setSearchValue] = useState("")
     const [toggle, setToggle] = useState(true)
 
@@ -60,25 +60,6 @@ const Home = () => {
             })
         }
     }, [currentPage, toggle])
-
-    // const postsList = useSelector(getPostsList())
-    const paginate = useSelector(getPaginate())
-    const onePost = useSelector(getPostById(postId))
-    // const {
-    //     newPostList,
-    //     handleClickSort,
-    //     handleClickSearch,
-    //     handleClickRegistr,
-    //     registr
-    // } = useSearchSort(postsList)
-    let renderPostsList = null
-    let renderPost = null
-
-    renderPostsList = <PostsList items={postsList} />
-
-    if (postId) {
-        renderPost = <Post post={post} />
-    }
 
     const handleSelectPage = (page) => {
         if (currentPage === page) {
@@ -135,23 +116,18 @@ const Home = () => {
 
     const handleSearchClick = () => {
         setToggle((prev) => !prev)
-        // const idx = (currentPage - 1) * sizePage
 
-        // const foundPosts = postService
-        //     .fetchPaginateWithSearch({
-        //         searchValue,
-        //         registr: true,
-        //         startIndex: idx,
-        //         count: sizePage
-        //     })
-        //     .then((data) => {
-        //         setPostsList(data.postsList)
-        //         setTotalCountPosts(data.totalCount)
-        //     })
         setCurrentPage(1)
         setPostsList([])
+    }
 
-        // console.log(foundPosts)
+    let renderPostsList = null
+    let renderPost = null
+
+    renderPostsList = <PostsList items={postsList} />
+
+    if (postId) {
+        renderPost = <Post post={post} />
     }
 
     return postsList ? (
