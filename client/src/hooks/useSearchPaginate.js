@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import postService from "../service/post.service"
 import { getPaginate } from "../store/postsSlice"
 
-const useSearchPaginate = () => {
+const useSearchPaginate = (userId) => {
     const { sizePage, sizeListPaginate } = useSelector(getPaginate())
     const { postId } = useParams()
     const [currentPage, setCurrentPage] = useState(1)
@@ -69,7 +69,8 @@ const useSearchPaginate = () => {
                     sortType,
                     registr,
                     startIndex: idx,
-                    count: sizePage
+                    count: sizePage,
+                    userId
                 })
                 .then((data) => {
                     setPostsList(data.postsList)
@@ -81,7 +82,12 @@ const useSearchPaginate = () => {
             setIsLoading(true)
 
             postService
-                .fetchPaginate({ startIndex: idx, count: sizePage, sortType })
+                .fetchPaginate({
+                    startIndex: idx,
+                    count: sizePage,
+                    sortType,
+                    userId
+                })
                 .then((data) => {
                     setPostsList(data.postsList)
                     setTotalCountPosts(data.totalCount)

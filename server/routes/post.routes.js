@@ -32,14 +32,22 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/search", async (req, res) => {
-  const { searchValue, registr, startIndex, count, sortType } = req.body;
+  const { searchValue, registr, startIndex, count, sortType, userId } =
+    req.body;
 
   try {
     const flagI = registr ? "" : "i";
     const reg = new RegExp(`${searchValue}`, flagI);
+    let foundTitle = [];
+    let foundBody = [];
 
-    const foundTitle = await Post.find({ title: reg });
-    const foundBody = await Post.find({ body: reg });
+    if (userId) {
+      foundTitle = await Post.find({ title: reg, userId });
+      foundBody = await Post.find({ body: reg, userId });
+    } else {
+      foundTitle = await Post.find({ title: reg });
+      foundBody = await Post.find({ body: reg });
+    }
 
     const foundResult = [
       ...new Set([
@@ -64,14 +72,26 @@ router.post("/search", async (req, res) => {
 });
 
 router.post("/paginate", async (req, res) => {
-  const { startIndex, count, sortType } = req.body;
+  const { startIndex, count, sortType, userId } = req.body;
   const sortNumber = sortType === "asc" ? 1 : -1;
   try {
-    const postsList = await Post.find()
-      .sort({ title: sortNumber })
-      .skip(startIndex)
-      .limit(count);
-    const totalCount = await Post.count();
+    let postsList = [];
+    let totalCount = 0;
+
+    if (userId) {
+      totalCount = await Post.count({ userId });
+      postsList = await Post.find({ userId })
+        .sort({ title: sortNumber })
+        .skip(startIndex)
+        .limit(count);
+    } else {
+      totalCount = await Post.count();
+
+      postsList = await Post.find()
+        .sort({ title: sortNumber })
+        .skip(startIndex)
+        .limit(count);
+    }
 
     res.status(201).send({ postsList, totalCount });
   } catch (e) {
