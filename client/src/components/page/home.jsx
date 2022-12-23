@@ -8,7 +8,6 @@ import SearchForm from "../forms/searchForm"
 import Pagination from "../pagination"
 import utils from "../../util"
 import postService from "../../service/post.service"
-import Loader from "../loader"
 
 const Home = () => {
     const { sizePage, sizeListPaginate } = useSelector(getPaginate())
@@ -26,9 +25,7 @@ const Home = () => {
     const [sortType, setSortType] = useState("asc")
 
     const handleClickRegistr = () => {
-        if (searchValue) {
-            setRegistr((prev) => !prev)
-        }
+        setRegistr((prev) => !prev)
     }
     const handleClickSearch = (value) => {
         setSearchValue(value)
@@ -66,6 +63,8 @@ const Home = () => {
 
     useEffect(() => {
         if (searchValue) {
+            setIsLoading(true)
+
             const idx = (currentPage - 1) * sizePage
 
             postService
@@ -83,6 +82,7 @@ const Home = () => {
                 })
         } else {
             const idx = (currentPage - 1) * sizePage
+            setIsLoading(true)
 
             postService
                 .fetchPaginate({ startIndex: idx, count: sizePage, sortType })
@@ -119,40 +119,14 @@ const Home = () => {
         }
     }
 
-    const calculateListPage = () => {
-        const paginateCountPosts = (firstPagePaginate - 1) * sizePage
-        const differencePosts = totalCountPosts - paginateCountPosts
+    const listPage = utils.paginate.calculateListPage(
+        firstPagePaginate,
+        sizePage,
+        totalCountPosts,
+        sizeListPaginate
+    )
 
-        const isCountPostsSufficeForListPaginate =
-            Math.ceil(differencePosts / sizePage) >= sizeListPaginate
-
-        let arrayNumber = []
-
-        if (isCountPostsSufficeForListPaginate) {
-            arrayNumber = utils.getArrayNumbers(
-                firstPagePaginate + sizeListPaginate
-            )
-        } else {
-            const sizeListPaginateDiff = Math.ceil(differencePosts / sizePage)
-
-            arrayNumber = utils.getArrayNumbers(
-                firstPagePaginate + sizeListPaginateDiff
-            )
-        }
-
-        return arrayNumber.slice(firstPagePaginate - 1)
-    }
-
-    let renderPostsList = null
-    let renderPost = null
-
-    renderPostsList = <PostsList items={postsList} isLoading={isLoading} />
-
-    if (postId) {
-        renderPost = <Post post={post} />
-    }
-
-    return !isLoading ? (
+    return (
         <>
             <div className="col-4 shadow-lg p-3 m-2 mb-5 bg-body rounded">
                 <div>
@@ -168,20 +142,18 @@ const Home = () => {
                     className="d-inline-block"
                     style={{ width: "100%", height: sizePage * 60 + "px" }}
                 >
-                    {renderPostsList}
+                    <PostsList items={postsList} isLoading={isLoading} />
                 </div>
                 <Pagination
-                    listPage={calculateListPage()}
+                    listPage={listPage}
                     onSelectPage={handleSelectPage}
                     currentPage={currentPage}
                 />
             </div>
             <div className="col-7 shadow-lg p-3 m-2 mb-5 bg-body rounded">
-                {renderPost}
+                {postId ? <Post post={post} /> : null}
             </div>
         </>
-    ) : (
-        <Loader />
     )
 }
 

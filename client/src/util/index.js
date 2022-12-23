@@ -1,8 +1,7 @@
-import { paginate, getArrayNumbers } from "../util/paginate"
+import { paginate, getArrayNumbers, calculateListPage } from "../util/paginate"
 
 const utils = {
-    paginate,
-    getArrayNumbers
+    paginate: { paginate, getArrayNumbers, calculateListPage }
 }
 
 export default utils
