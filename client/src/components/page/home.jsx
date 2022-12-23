@@ -1,32 +1,35 @@
-import React, { useState, useRef } from "react"
-import { useParams } from "react-router-dom"
+import React from "react"
 import Post from "../post"
 import PostsList from "../postsList"
-import { useSelector } from "react-redux"
-import { getPostById, getPostsList } from "../../store/postsSlice"
 import SearchForm from "../forms/searchForm"
-import useSearchSort from "../../hooks/useSearchSort"
+import Pagination from "../pagination"
+import utils from "../../util"
+import useSearchPaginate from "../../hooks/useSearchPaginate"
 
 const Home = () => {
-    const postsList = useSelector(getPostsList())
-    const { postId } = useParams()
-    const onePost = useSelector(getPostById(postId))
     const {
-        newPostList,
+        sizePage,
+        sizeListPaginate,
+        postId,
+        currentPage,
+        postsList,
+        post,
+        firstPagePaginate,
+        totalCountPosts,
+        isLoading,
+        registr,
+        handleSelectPage,
         handleClickSort,
         handleClickSearch,
-        handleClickRegistr,
-        registr
-    } = useSearchSort(postsList)
+        handleClickRegistr
+    } = useSearchPaginate()
 
-    let renderPostsList = null
-    let renderPost = null
-
-    renderPostsList = <PostsList items={newPostList} />
-
-    if (postId && onePost) {
-        renderPost = <Post title={onePost.title} body={onePost.body} />
-    }
+    const listPage = utils.paginate.calculateListPage(
+        firstPagePaginate,
+        sizePage,
+        totalCountPosts,
+        sizeListPaginate
+    )
 
     return (
         <>
@@ -40,12 +43,20 @@ const Home = () => {
                         registr={registr}
                     />
                 </div>
-                <div className="tsa_scrollbar tsa_height">
-                    {renderPostsList}
+                <div
+                    className="d-inline-block"
+                    style={{ width: "100%", height: sizePage * 60 + "px" }}
+                >
+                    <PostsList items={postsList} isLoading={isLoading} />
                 </div>
+                <Pagination
+                    listPage={listPage}
+                    onSelectPage={handleSelectPage}
+                    currentPage={currentPage}
+                />
             </div>
             <div className="col-7 shadow-lg p-3 m-2 mb-5 bg-body rounded">
-                {renderPost}
+                {postId ? <Post post={post} /> : null}
             </div>
         </>
     )

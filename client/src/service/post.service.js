@@ -4,9 +4,23 @@ import config from "../config"
 const url = config.backendEndPoint + "posts"
 
 const postService = {
-    fetchAll: async () => {
-        const content = await httpService.get(url)
-        const { data } = content
+    async fetchAll() {
+        const { data } = await httpService.get(url)
+
+        return data
+    },
+    async fetchPaginateWithSearch(search) {
+        const { data } = await httpService.post(url + "/search", search)
+
+        return data
+    },
+    async fetchPaginate(reqBody) {
+        const { data } = await httpService.post(url + "/paginate", reqBody)
+
+        return data
+    },
+    async getPostById(id) {
+        const { data } = await httpService.get(`${url}/${id}`)
 
         return data
     },

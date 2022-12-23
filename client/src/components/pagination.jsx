@@ -1,60 +1,82 @@
-import React, { useEffect, useState } from "react"
-import _ from "lodash"
+import React from "react"
 import PropTypes from "prop-types"
 
-const Pagination = ({
-    totalCountPages,
-    paginationSize,
-    handleChangePage,
-    currentPage
-}) => {
-    const [pages, setPages] = useState()
-    useEffect(() => {
-        setPages(_.range(1, Math.min(totalCountPages, paginationSize) + 1))
-    }, [])
+// const Pagination = ({
+//     totalCountPages,
+//     paginationSize,
+//     handleChangePage,
+//     currentPage
+// }) => {
+const Pagination = ({ listPage, onSelectPage, currentPage }) => {
+    // const [pages, setPages] = useState()
+    // useEffect(() => {
+    //     setPages(
+    //         utils.getArrayNumbers(Math.min(totalCountPages, paginationSize) + 1)
+    //     )
+    // }, [])
 
     const classLiItem = "page-item"
 
-    const handleClickLeft = () => {
-        if (pages[0] > paginationSize) {
-            const start = pages[0] - paginationSize
-            const end = start + paginationSize
+    // const handleClickLeft = () => {
+    //     // if (pages[0] > paginationSize) {
+    //     //     const start = pages[0] - paginationSize
+    //     //     const end = start + paginationSize
+    //     //     setPages(_.range(start, end))
+    //     //     handleChangePage(start)
+    //     // }
+    // }
+    // const handleClickRight = () => {
+    //     // if (pages[paginationSize - 1] < totalCountPages - 1) {
+    //     //     const start = pages[0] + paginationSize
+    //     //     const end = Math.min(start + paginationSize, totalCountPages)
+    //     //     setPages(_.range(start, end))
+    //     //     handleChangePage(start)
+    //     // }
+    // }
 
-            setPages(_.range(start, end))
-            handleChangePage(start)
-        }
-    }
-    const handleClickRight = () => {
-        if (pages[paginationSize - 1] < totalCountPages - 1) {
-            const start = pages[0] + paginationSize
-            const end = Math.min(start + paginationSize, totalCountPages)
+    const handleChangePage = ({ target }) => {
+        let page = null
+        switch (target.text) {
+            case "«":
+                page = -2
+                break
+            case "»":
+                page = -1
+                break
 
-            setPages(_.range(start, end))
-            handleChangePage(start)
+            default:
+                page = Number(target.text)
+                break
         }
+        onSelectPage(page)
     }
 
     return (
-        pages && (
+        listPage.length > 0 && (
             <ul className="pagination pagination-sm justify-content-center">
                 <li className="page-item">
                     <a
                         className="page-link"
                         href="#"
-                        onClick={handleClickLeft}
-                    >{`<<`}</a>
+                        onClick={handleChangePage}
+                    >
+                        &laquo;
+                    </a>
                 </li>
-                {pages.map((page) => (
+                {listPage.map((page) => (
                     <li
                         key={page}
-                        onClick={() => handleChangePage(page)}
                         className={
                             currentPage === page
                                 ? classLiItem + " active"
                                 : classLiItem
                         }
                     >
-                        <a className="page-link" href="#">
+                        <a
+                            className="page-link"
+                            href="#"
+                            onClick={handleChangePage}
+                        >
                             {page}
                         </a>
                     </li>
@@ -63,9 +85,9 @@ const Pagination = ({
                     <a
                         className="page-link"
                         href="#"
-                        onClick={handleClickRight}
+                        onClick={handleChangePage}
                     >
-                        {`>>`}
+                        &raquo;
                     </a>
                 </li>
             </ul>
@@ -74,10 +96,9 @@ const Pagination = ({
 }
 
 Pagination.propTypes = {
-    totalCountPages: PropTypes.number,
-    paginationSize: PropTypes.number,
-    currentPage: PropTypes.number,
-    handleChangePage: PropTypes.func
+    listPage: PropTypes.array,
+    onSelectPage: PropTypes.func,
+    currentPage: PropTypes.number
 }
 
 export default Pagination

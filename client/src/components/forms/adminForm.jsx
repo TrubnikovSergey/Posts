@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react"
+import React from "react"
+// import { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import useSearchSort from "../../hooks/useSearchSort"
+import useSearchPaginate from "../../hooks/useSearchPaginate"
 import localStorageService from "../../service/localStorage.service"
 import { getAuthUser } from "../../store/authUserSlice"
 import { getUserPostsList } from "../../store/postsSlice"
@@ -9,6 +10,8 @@ import {
     getTypePostsList,
     toggleViewPostsList
 } from "../../store/viewPostsListSlice"
+import utils from "../../util"
+import Pagination from "../pagination"
 import PostsList from "../postsList"
 import SearchForm from "./searchForm"
 
@@ -20,13 +23,13 @@ const AdminForm = () => {
     const authUser = useSelector(getAuthUser())
     const userPosts = useSelector(getUserPostsList(userId))
 
-    const {
-        newPostList,
-        handleClickSort,
-        handleClickSearch,
-        handleClickRegistr,
-        registr
-    } = useSearchSort(userPosts)
+    // const {
+    //     newPostList,
+    //     handleClickSort,
+    //     handleClickSearch,
+    //     handleClickRegistr,
+    //     registr
+    // } = useSearchPaginate(userPosts)
 
     const handleClickCreate = () => {
         navigate("/admin/new")
@@ -35,6 +38,28 @@ const AdminForm = () => {
     const handleChangeView = () => {
         dispatch(toggleViewPostsList())
     }
+
+    const {
+        sizePage,
+        sizeListPaginate,
+        currentPage,
+        firstPagePaginate,
+        totalCountPosts,
+        isLoading,
+        registr,
+        postsList,
+        handleSelectPage,
+        handleClickSort,
+        handleClickSearch,
+        handleClickRegistr
+    } = useSearchPaginate(userId)
+
+    const listPage = utils.paginate.calculateListPage(
+        firstPagePaginate,
+        sizePage,
+        totalCountPosts,
+        sizeListPaginate
+    )
 
     return (
         <>
@@ -76,10 +101,16 @@ const AdminForm = () => {
                     onClickRegistr={handleClickRegistr}
                     registr={registr}
                 />
+                <Pagination
+                    listPage={listPage}
+                    onSelectPage={handleSelectPage}
+                    currentPage={currentPage}
+                />
                 <PostsList
-                    items={newPostList}
+                    items={postsList}
                     endPoint="/admin/"
                     extended={true}
+                    isLoading={isLoading}
                 />
             </div>
         </>

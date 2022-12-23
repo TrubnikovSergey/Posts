@@ -4,7 +4,12 @@ import "bootstrap/dist/css/bootstrap.css"
 import "./App.css"
 import AdminPage from "./components/page/admin"
 import { useDispatch, useSelector } from "react-redux"
-import { getPostsList, postsFetchAll } from "./store/postsSlice"
+import {
+    getPaginate,
+    getPostsList,
+    postsFetchAll,
+    postsFetchPaginate
+} from "./store/postsSlice"
 import { Layout } from "./layout/layout"
 import RegForm from "./components/forms/regForm"
 import LayoutLogin from "./layout/layoutLogin"
@@ -24,6 +29,7 @@ function App() {
     const dispatch = useDispatch()
     const authUser = localStorageService.getAuthUser()
     const postsList = useSelector(getPostsList())
+    const { sizePage } = useSelector(getPaginate())
     const authError = useSelector(getAuthError())
     const isAuth = useSelector(getIsAuth())
 
@@ -37,7 +43,13 @@ function App() {
         if (authUser) {
             dispatch(signInWithToken(authUser))
         }
-        dispatch(postsFetchAll())
+        dispatch(
+            postsFetchPaginate({
+                startIndex: 0,
+                count: sizePage,
+                sortType: "asc"
+            })
+        )
     }, [])
 
     return (

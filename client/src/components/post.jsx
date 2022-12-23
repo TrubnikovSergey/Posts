@@ -1,25 +1,27 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Loader from "./loader"
 
-const Post = ({ title, body }) => {
-    return (
+const Post = ({ post }) => {
+    return post ? (
         <>
             <div>
                 <div className="mb-5">
-                    <h1>{title}</h1>
+                    <h1>{post.title}</h1>
                 </div>
                 <div
                     className="tsa-white-space"
-                    dangerouslySetInnerHTML={{ __html: body }}
+                    dangerouslySetInnerHTML={{ __html: post.body }}
                 />
             </div>
         </>
+    ) : (
+        <Loader />
     )
 }
 
 Post.propTypes = {
-    title: PropTypes.string,
-    body: PropTypes.string
+    post: PropTypes.object
 }
 
 export default Post

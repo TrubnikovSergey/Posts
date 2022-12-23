@@ -2,11 +2,13 @@ import React from "react"
 import PropTypes from "prop-types"
 import usePostList from "../hooks/usePostList"
 import { Link } from "react-router-dom"
+import Loader from "./loader"
 
 const PostsList = ({
     items,
     endPoint = "/",
     view = "list",
+    isLoading = false,
     extended = false
 }) => {
     const { handleDelete, typeList, handleEdit } = usePostList()
@@ -27,7 +29,7 @@ const PostsList = ({
     let render = null
 
     if (view === "list" && !extended) {
-        render = (
+        render = !isLoading ? (
             <>
                 {items.map((post) => (
                     <div key={post._id}>
@@ -42,10 +44,12 @@ const PostsList = ({
                     </div>
                 ))}
             </>
+        ) : (
+            <Loader />
         )
     } else {
         if (typeList === "list") {
-            render = (
+            render = !isLoading ? (
                 <>
                     {items.map((post) => (
                         <div key={post._id}>
@@ -78,9 +82,11 @@ const PostsList = ({
                         </div>
                     ))}
                 </>
+            ) : (
+                <Loader />
             )
         } else if (typeList === "tile") {
-            render = (
+            render = !isLoading ? (
                 <>
                     <div className="d-flex flex-wrap justify-content-center">
                         {items.map((post) => (
@@ -132,6 +138,8 @@ const PostsList = ({
                         ))}
                     </div>
                 </>
+            ) : (
+                <Loader />
             )
         } else {
             render = <h1>Post list is undefinde</h1>
@@ -145,6 +153,7 @@ PostsList.propTypes = {
     items: PropTypes.array,
     endPoint: PropTypes.string,
     view: PropTypes.string,
+    isLoading: PropTypes.bool,
     extended: PropTypes.bool
 }
 

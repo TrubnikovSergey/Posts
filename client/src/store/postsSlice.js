@@ -6,6 +6,8 @@ const postSlice = createSlice({
     name: "posts",
     initialState: {
         entities: [],
+        sizeListPaginate: 2,
+        sizePage: 9,
         isLoading: false,
         error: null
     },
@@ -64,6 +66,18 @@ const postSlice = createSlice({
         requestPostsFailed(state, action) {
             state.error = action.payload
             state.isLoading = false
+        },
+        requestPostsPaginate(state, action) {
+            state.isLoading = true
+        },
+        receivePostsPaginate(state, action) {
+            state.entities = action.payload.postsList
+            state.totalCount = action.payload.totalCount
+            state.isLoading = false
+        },
+        requestPostsPaginateFailed(state, action) {
+            state.error = action.payload
+            state.isLoading = false
         }
     }
 })
@@ -73,6 +87,9 @@ const {
     requestPosts,
     receivePosts,
     requestPostsFailed,
+    requestPostsPaginate,
+    receivePostsPaginate,
+    requestPostsPaginateFailed,
     receiveCreatePost,
     requestCreatePost,
     requestCreatePostFailed,
@@ -91,6 +108,16 @@ export const postsFetchAll = () => async (dispatch) => {
         dispatch(receivePosts(content))
     } catch (error) {
         dispatch(requestPostsFailed(error.message))
+    }
+}
+
+export const postsFetchPaginate = (reqBody) => async (dispatch) => {
+    dispatch(requestPostsPaginate())
+    try {
+        const content = await postService.fetchPaginate(reqBody)
+        dispatch(receivePostsPaginate(content))
+    } catch (error) {
+        dispatch(requestPostsPaginateFailed(error.message))
     }
 }
 
@@ -136,6 +163,13 @@ export const createPost = (post) => async (dispatch) => {
         dispatch(receiveCreatePost(data))
     } catch (error) {
         dispatch(requestCreatePostFailed(error.message))
+    }
+}
+
+export const getPaginate = () => (state) => {
+    return {
+        sizePage: state.posts.sizePage,
+        sizeListPaginate: state.posts.sizeListPaginate
     }
 }
 
