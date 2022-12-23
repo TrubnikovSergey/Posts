@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import useSearch from "../../hooks/useSearch"
+import useSearchPaginate from "../../hooks/useSearchPaginate"
 import localStorageService from "../../service/localStorage.service"
 import { getAuthUser } from "../../store/authUserSlice"
 import { getUserPostsList } from "../../store/postsSlice"
@@ -26,7 +26,7 @@ const AdminForm = () => {
         handleClickSearch,
         handleClickRegistr,
         registr
-    } = useSearch(userPosts)
+    } = useSearchPaginate(userPosts)
 
     const handleClickCreate = () => {
         navigate("/admin/new")
