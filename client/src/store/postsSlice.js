@@ -9,6 +9,7 @@ const postSlice = createSlice({
         sizeListPaginate: 2,
         sizePage: 9,
         isLoading: false,
+        toggle: false,
         error: null
     },
     reducers: {
@@ -33,9 +34,6 @@ const postSlice = createSlice({
         requestUpdatePost(state, action) {
             state.isLoading = true
         },
-        requestDeletePost(state, action) {
-            state.isLoading = true
-        },
         receiveUpdatePost(state, action) {
             state.entities.forEach((item) => {
                 if (item._id === action.payload._id) {
@@ -44,16 +42,20 @@ const postSlice = createSlice({
                 }
             })
         },
+        requestDeletePost(state, action) {
+            state.isLoading = true
+        },
         receiveDeletePost(state, action) {
-            const indexItem = state.entities.findIndex(
-                (item) => item._id === action.payload
-            )
+            state.toggle = !state.toggle
+            // const indexItem = state.entities.findIndex(
+            //     (item) => item._id === action.payload
+            // )
 
-            if (indexItem !== -1) {
-                state.entities.splice(indexItem, 1)
-            }
+            // if (indexItem !== -1) {
+            //     state.entities.splice(indexItem, 1)
+            // }
 
-            state.isLoading = false
+            // state.isLoading = false
         },
         requestDeletePostFailed(state, action) {
             state.error = action.payload
@@ -175,6 +177,10 @@ export const getPaginate = () => (state) => {
 
 export const getPostsList = () => (state) => {
     return state.posts.entities
+}
+
+export const getPostsListToggle = () => (state) => {
+    return state.posts.toggle
 }
 
 export const getUserPostsList = (userId) => (state) => {

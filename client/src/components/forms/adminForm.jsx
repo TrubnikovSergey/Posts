@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom"
 import useSearchPaginate from "../../hooks/useSearchPaginate"
 import localStorageService from "../../service/localStorage.service"
 import { getAuthUser } from "../../store/authUserSlice"
-import { getUserPostsList } from "../../store/postsSlice"
 import {
     getTypePostsList,
     toggleViewPostsList
@@ -21,15 +20,6 @@ const AdminForm = () => {
     const type = useSelector(getTypePostsList())
     const { userId } = localStorageService.getAuthUser()
     const authUser = useSelector(getAuthUser())
-    const userPosts = useSelector(getUserPostsList(userId))
-
-    // const {
-    //     newPostList,
-    //     handleClickSort,
-    //     handleClickSearch,
-    //     handleClickRegistr,
-    //     registr
-    // } = useSearchPaginate(userPosts)
 
     const handleClickCreate = () => {
         navigate("/admin/new")

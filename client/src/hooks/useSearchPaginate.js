@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import postService from "../service/post.service"
-import { getPaginate } from "../store/postsSlice"
+import { getPaginate, getPostsListToggle } from "../store/postsSlice"
 
 const useSearchPaginate = (userId) => {
     const { sizePage, sizeListPaginate } = useSelector(getPaginate())
@@ -15,6 +15,7 @@ const useSearchPaginate = (userId) => {
     const [searchValue, setSearchValue] = useState("")
     const [toggle, setToggle] = useState(true)
     const [isLoading, setIsLoading] = useState(true)
+    const postsListToggle = useSelector(getPostsListToggle())
 
     const [registr, setRegistr] = useState(false)
     const [sortType, setSortType] = useState("asc")
@@ -94,7 +95,7 @@ const useSearchPaginate = (userId) => {
                     setIsLoading(false)
                 })
         }
-    }, [currentPage, searchValue, sortType, toggle])
+    }, [currentPage, searchValue, sortType, toggle, postsListToggle])
 
     const handleSelectPage = (page) => {
         if (currentPage === page) {
