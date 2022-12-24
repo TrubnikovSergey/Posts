@@ -11,6 +11,7 @@ import draftToHtml from "draftjs-to-html"
 import htmlToDraft from "html-to-draftjs"
 import Loader from "../loader"
 import postService from "../../service/post.service"
+import { toast } from "react-toastify"
 
 const EditPostPage = () => {
     const { postId } = useParams()
@@ -61,27 +62,31 @@ const EditPostPage = () => {
     }
 
     const saveHandle = async () => {
-        if (postId) {
-            // dispatch(updatePost({ ...data, _id: postId, userId }))
-            const post = { ...data, _id: postId, userId }
-            const authUser = localStorageService.getAuthUser()
-            await postService.update(
-                post,
-                authUser.accessToken,
-                authUser.refreshToken
-            )
-        } else {
-            // dispatch(createPost({ ...data, userId }))
-            const post = { ...data, userId }
-            const authUser = localStorageService.getAuthUser()
-            await postService.create(
-                post,
-                authUser.accessToken,
-                authUser.refreshToken
-            )
-        }
+        if (data.title && data.body) {
+            if (postId) {
+                // dispatch(updatePost({ ...data, _id: postId, userId }))
+                const post = { ...data, _id: postId, userId }
+                const authUser = localStorageService.getAuthUser()
+                await postService.update(
+                    post,
+                    authUser.accessToken,
+                    authUser.refreshToken
+                )
+            } else {
+                // dispatch(createPost({ ...data, userId }))
+                const post = { ...data, userId }
+                const authUser = localStorageService.getAuthUser()
+                await postService.create(
+                    post,
+                    authUser.accessToken,
+                    authUser.refreshToken
+                )
+            }
 
-        navigate("/admin")
+            navigate("/admin")
+        } else {
+            toast.error("Post title and body must be filled")
+        }
     }
 
     let render = (
