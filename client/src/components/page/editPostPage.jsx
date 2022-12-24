@@ -9,39 +9,47 @@ import { EditorState, convertToRaw, ContentState } from "draft-js"
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import draftToHtml from "draftjs-to-html"
 import htmlToDraft from "html-to-draftjs"
+import Loader from "../loader"
+import postService from "../../service/post.service"
 
 const EditPostPage = () => {
-    const handleChange = ({ target }) => {
-        setData((prev) => ({ ...prev, [target.name]: target.value }))
-    }
     const { postId } = useParams()
-    const post = useSelector(getPostById(postId))
-    const [data, setData] = post
-        ? useState({ title: post.title, body: post.body })
-        : useState({ title: "", body: "" })
+    const [post, setPost] = useState()
+
+    // const post = useSelector(getPostById(postId))
+    const [data, setData] = useState({ title: "", body: "" })
 
     let initEditor = EditorState.createEmpty()
+    const [editorState, setEditorState] = useState(initEditor)
 
     useEffect(() => {
-        if (data.body) {
-            const contentBlock = htmlToDraft(data.body)
-            const contentState = ContentState.createFromBlockArray(
-                contentBlock.contentBlocks
-            )
-            initEditor = EditorState.createWithContent(contentState)
+        if (postId) {
+            postService.getPostById(postId).then((resp) => {
+                setPost(resp)
+                setData({ title: resp.title, body: resp.body })
 
-            setEditorState(initEditor)
+                if (resp.body) {
+                    const contentBlock = htmlToDraft(resp.body)
+                    const contentState = ContentState.createFromBlockArray(
+                        contentBlock.contentBlocks
+                    )
+                    initEditor = EditorState.createWithContent(contentState)
+
+                    setEditorState(initEditor)
+                }
+            })
         }
     }, [])
 
-    const [editorState, setEditorState] = useState(initEditor)
-
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const { userId } = localStorageService.getAuthUser()
 
     const goBack = () => {
         navigate("/admin")
+    }
+    const handleChange = ({ target }) => {
+        setData((prev) => ({ ...prev, [target.name]: target.value }))
     }
 
     const handleEditorChange = (editorState) => {
@@ -52,58 +60,61 @@ const EditPostPage = () => {
         })
     }
 
-    const saveHandle = () => {
+    const saveHandle = async () => {
         if (postId) {
-            dispatch(updatePost({ ...data, _id: postId, userId }))
+            // dispatch(updatePost({ ...data, _id: postId, userId }))
+            const post = { ...data, _id: postId, userId }
+            const authUser = localStorageService.getAuthUser()
+            await postService.update(
+                post,
+                authUser.accessToken,
+                authUser.refreshToken
+            )
         } else {
-            dispatch(createPost({ ...data, userId }))
+            // dispatch(createPost({ ...data, userId }))
+            const post = { ...data, userId }
+            const authUser = localStorageService.getAuthUser()
+            await postService.create(
+                post,
+                authUser.accessToken,
+                authUser.refreshToken
+            )
         }
 
         navigate("/admin")
     }
 
-    let render = null
-    if (data) {
-        render = (
-            <>
-                <div>
-                    <button
-                        className="btn btn-primary mb-2 mt-2"
-                        onClick={goBack}
-                    >
-                        {postId ? "Back" : "Cancel"}
-                    </button>
-                </div>
-                <h3 className="mt-4">Title</h3>
-                <InputField
-                    name="title"
-                    value={data.title}
-                    onChange={handleChange}
-                ></InputField>
-                <div>
-                    <h3 className="mt-4">Post</h3>
-                    <Editor
-                        editorState={editorState}
-                        onEditorStateChange={handleEditorChange}
-                        wrapperClassName="wrapper-class"
-                        editorClassName="editor-class"
-                    />
-                    {/* <TextAreaField
-                    label="Post"
-                    name="body"
-                    value={data.body}
-                    onChange={handleChange}
-                /> */}
-                </div>
-                <div className="d-flex justify-content-end mt-2">
-                    <button className="btn btn-primary" onClick={saveHandle}>
-                        {postId ? "Save" : "Create"}
-                    </button>
-                </div>
-            </>
-        )
-    } else {
-        render = <h1>Post not found</h1>
+    let render = (
+        <>
+            <div>
+                <button className="btn btn-primary mb-2 mt-2" onClick={goBack}>
+                    {postId ? "Back" : "Cancel"}
+                </button>
+            </div>
+            <h3 className="mt-4">Title</h3>
+            <InputField
+                name="title"
+                value={data.title}
+                onChange={handleChange}
+            ></InputField>
+            <div>
+                <h3 className="mt-4">Post</h3>
+                <Editor
+                    editorState={editorState}
+                    onEditorStateChange={handleEditorChange}
+                    wrapperClassName="wrapper-class"
+                    editorClassName="editor-class"
+                />
+            </div>
+            <div className="d-flex justify-content-end mt-2">
+                <button className="btn btn-primary" onClick={saveHandle}>
+                    {postId ? "Save" : "Create"}
+                </button>
+            </div>
+        </>
+    )
+    if (postId && !post) {
+        render = <Loader />
     }
 
     return render
