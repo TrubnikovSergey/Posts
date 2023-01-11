@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
 
     if (!dataAccess && !dataRefresh) {
       return res.status(401).json({ message: "Unauthorized" });
-      // req.userError = "Unauthorized";
     } else {
       req.user = dataAccess ? dataAccess : dataRefresh;
       req.userError = null;

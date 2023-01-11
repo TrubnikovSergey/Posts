@@ -18,7 +18,6 @@ const NavBar = () => {
                 </NavLink>
             )
         } else {
-            // renderMenu = "...loading..."
             renderMenu = <Loader />
         }
     } else {

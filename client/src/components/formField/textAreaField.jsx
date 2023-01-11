@@ -22,21 +22,6 @@ const TextAreaField = ({ label, name, type, placeholder, value, onChange }) => {
     )
 }
 
-/*
-                <label htmlFor={name}>{label ? `${label}` : ""}</label>
-                <br />
-                <textarea
-                    className="form-control"
-                    rows="15"
-                    name={name}
-                    id={name}
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                />
-*/
-
 TextAreaField.propTypes = {
     type: PropTypes.string,
     placeholder: PropTypes.string,
