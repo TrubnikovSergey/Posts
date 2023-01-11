@@ -47,15 +47,6 @@ const postSlice = createSlice({
         },
         receiveDeletePost(state, action) {
             state.toggle = !state.toggle
-            // const indexItem = state.entities.findIndex(
-            //     (item) => item._id === action.payload
-            // )
-
-            // if (indexItem !== -1) {
-            //     state.entities.splice(indexItem, 1)
-            // }
-
-            // state.isLoading = false
         },
         requestDeletePostFailed(state, action) {
             state.error = action.payload

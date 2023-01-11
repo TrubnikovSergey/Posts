@@ -38,11 +38,3 @@ RadioField.propTypes = {
 }
 
 export default RadioField
-
-/* // <><p>How old are you?</p>
-    // <input type="radio" id="child" name="age" value="child">
-    // <label for="child">17 years oryounger</label><br>
-    // <input type="radio" id="adult" name="age" value="adult">
-    // <label for="adult">18 - 64 years</label><br>
-    // <input type="radio" id="senior" name="age" value="senior">
-    // <label for="senior">65 years or older</label></> */

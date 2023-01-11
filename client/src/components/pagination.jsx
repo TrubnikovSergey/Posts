@@ -1,38 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-// const Pagination = ({
-//     totalCountPages,
-//     paginationSize,
-//     handleChangePage,
-//     currentPage
-// }) => {
 const Pagination = ({ listPage, onSelectPage, currentPage }) => {
-    // const [pages, setPages] = useState()
-    // useEffect(() => {
-    //     setPages(
-    //         utils.getArrayNumbers(Math.min(totalCountPages, paginationSize) + 1)
-    //     )
-    // }, [])
-
     const classLiItem = "page-item"
-
-    // const handleClickLeft = () => {
-    //     // if (pages[0] > paginationSize) {
-    //     //     const start = pages[0] - paginationSize
-    //     //     const end = start + paginationSize
-    //     //     setPages(_.range(start, end))
-    //     //     handleChangePage(start)
-    //     // }
-    // }
-    // const handleClickRight = () => {
-    //     // if (pages[paginationSize - 1] < totalCountPages - 1) {
-    //     //     const start = pages[0] + paginationSize
-    //     //     const end = Math.min(start + paginationSize, totalCountPages)
-    //     //     setPages(_.range(start, end))
-    //     //     handleChangePage(start)
-    //     // }
-    // }
 
     const handleChangePage = ({ target }) => {
         let page = null

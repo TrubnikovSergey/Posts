@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import localStorageService from "../../service/localStorage.service"
-import { createPost, getPostById, updatePost } from "../../store/postsSlice"
 import InputField from "../formField/inputField"
 import { Editor } from "react-draft-wysiwyg"
 import { EditorState, convertToRaw, ContentState } from "draft-js"
@@ -17,7 +15,6 @@ const EditPostPage = () => {
     const { postId } = useParams()
     const [post, setPost] = useState()
 
-    // const post = useSelector(getPostById(postId))
     const [data, setData] = useState({ title: "", body: "" })
 
     let initEditor = EditorState.createEmpty()
@@ -43,7 +40,6 @@ const EditPostPage = () => {
     }, [])
 
     const navigate = useNavigate()
-    // const dispatch = useDispatch()
     const { userId } = localStorageService.getAuthUser()
 
     const goBack = () => {
@@ -64,7 +60,6 @@ const EditPostPage = () => {
     const saveHandle = async () => {
         if (data.title && data.body) {
             if (postId) {
-                // dispatch(updatePost({ ...data, _id: postId, userId }))
                 const post = { ...data, _id: postId, userId }
                 const authUser = localStorageService.getAuthUser()
                 await postService.update(
@@ -73,7 +68,6 @@ const EditPostPage = () => {
                     authUser.refreshToken
                 )
             } else {
-                // dispatch(createPost({ ...data, userId }))
                 const post = { ...data, userId }
                 const authUser = localStorageService.getAuthUser()
                 await postService.create(
